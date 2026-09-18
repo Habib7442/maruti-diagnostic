@@ -414,6 +414,34 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
               <DoctorAppointmentCard doctor={doctor} />
             </div>
           </div>
+
+          {/* Related Specialists (Full width below appointment and bio columns) */}
+          {relatedDoctors.length > 0 && (
+            <section className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t border-line">
+              <div className="flex items-baseline justify-between mb-6">
+                <div>
+                  <h2 className="font-display font-medium text-2xl sm:text-3xl text-ink">
+                    Other Consulting Specialists
+                  </h2>
+                  <p className="text-xs sm:text-sm text-ink-soft mt-1">
+                    Explore other trusted medical consultants practicing at Maruti Diagnostic Centre
+                  </p>
+                </div>
+                <Link
+                  href="/doctors"
+                  className="text-xs sm:text-sm font-semibold text-red hover:text-red-deep hover:underline shrink-0"
+                >
+                  View all 16 doctors
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedDoctors.map((relDoc) => (
+                  <DoctorCard key={relDoc.id} doctor={relDoc} />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       </div>
     </>
