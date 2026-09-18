@@ -70,11 +70,11 @@ export function Header() {
           </a>
 
           <Link
-            href="/contact"
+            href="/booking"
             className="inline-flex items-center justify-center gap-2 bg-red hover:bg-red-deep text-white font-medium text-sm px-5 py-2.5 rounded-full transition-colors shadow-xs active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-blue min-h-[44px]"
           >
             <Calendar className="w-4 h-4 stroke-[2]" />
-            <span>Book a test</span>
+            <span>Book appointment</span>
           </Link>
         </div>
 
@@ -115,12 +115,12 @@ export function Header() {
             ))}
             <div className="pt-4 mt-2 border-t border-line flex flex-col gap-3">
               <Link
-                href="/contact"
+                href="/booking"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full flex items-center justify-center gap-2 bg-red hover:bg-red-deep text-white font-medium h-12 rounded-full transition-colors shadow-xs"
               >
                 <Calendar className="w-4 h-4 stroke-[2]" />
-                <span>Book a test</span>
+                <span>Book appointment</span>
               </Link>
               <a
                 href={`tel:${CENTRE_INFO.phones.primary}`}

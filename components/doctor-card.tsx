@@ -93,7 +93,7 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
         </Link>
 
         <Link
-          href={`/contact?doctor=${encodeURIComponent(doctor.name)}`}
+          href={`/booking?doctor=${encodeURIComponent(doctor.name)}`}
           className="inline-flex items-center gap-1 text-xs font-medium bg-paper hover:bg-red hover:text-white border border-line px-3 py-1.5 rounded-full text-ink transition-colors"
           title={`Enquire appointment with ${doctor.name}`}
         >

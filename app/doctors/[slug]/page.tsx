@@ -385,28 +385,6 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 </div>
               </section>
 
-              {/* Related Specialists */}
-              {relatedDoctors.length > 0 && (
-                <section className="pt-4">
-                  <div className="flex items-baseline justify-between mb-4">
-                    <h2 className="font-display font-medium text-xl sm:text-2xl text-ink">
-                      Other Consulting Specialists
-                    </h2>
-                    <Link
-                      href="/doctors"
-                      className="text-xs font-medium text-blue hover:underline"
-                    >
-                      View all 16 doctors
-                    </Link>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {relatedDoctors.map((relDoc) => (
-                      <DoctorCard key={relDoc.id} doctor={relDoc} />
-                    ))}
-                  </div>
-                </section>
-              )}
             </div>
 
             {/* Sticky Appointment & Booking Sidebar (4 Cols) */}

@@ -99,7 +99,7 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
 
         {/* WhatsApp Deep Link */}
         <a
-          href={`https://wa.me/91${CENTRE_INFO.whatsapp}?text=${whatsappMessage}`}
+          href={`https://wa.me/91${CENTRE_INFO.whatsapp.number}?text=${whatsappMessage}`}
           target="_blank"
           rel="noopener noreferrer"
           className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20 border border-[#25D366]/30 font-medium text-sm transition-colors"
@@ -136,11 +136,11 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
       {/* Link to general enquiry form */}
       <div className="mt-4 text-center">
         <Link
-          href={`/contact?doctor=${encodeURIComponent(doctor.name)}`}
+          href={`/booking?doctor=${encodeURIComponent(doctor.name)}`}
           className="text-xs text-blue hover:underline inline-flex items-center gap-1"
         >
           <HelpCircle className="w-3 h-3" />
-          <span>Prefer online message? Send enquiry form</span>
+          <span>Prefer online form? Book token online</span>
         </Link>
       </div>
     </aside>
