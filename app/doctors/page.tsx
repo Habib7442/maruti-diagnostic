@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Stethoscope } from "lucide-react";
@@ -91,6 +92,15 @@ export default function DoctorsPage() {
 
           {/* Searchable Directory Grid */}
           <DoctorDirectory />
+          <Suspense
+            fallback={
+              <div className="py-12 text-center text-ink-soft text-sm">
+                Loading specialist directory...
+              </div>
+            }
+          >
+            <DoctorDirectory />
+          </Suspense>
         </div>
       </div>
     </>

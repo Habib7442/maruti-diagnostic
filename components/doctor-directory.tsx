@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 import { Search, Stethoscope, Phone, RotateCcw } from "lucide-react";
 import { DOCTORS, DEPARTMENTS, MedicalDepartment, Doctor } from "@/data/doctors";
 import { DoctorCard } from "@/components/doctor-card";
@@ -9,6 +11,75 @@ import { CENTRE_INFO } from "@/data/centre";
 export function DoctorDirectory() {
   const [selectedDepartment, setSelectedDepartment] = useState<MedicalDepartment | "All">("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+
+  const getDepartmentFromParams = useCallback((): MedicalDepartment | "All" => {
+    const rawDept = searchParams.get("dept") || searchParams.get("department");
+    if (rawDept) {
+      const matched = DEPARTMENTS.find(
+        (d) => d.value.toLowerCase() === rawDept.trim().toLowerCase()
+      );
+      if (matched) return matched.value;
+    }
+    return "All";
+  }, [searchParams]);
+
+  const [selectedDepartment, setSelectedDepartment] = useState<MedicalDepartment | "All">(() =>
+    getDepartmentFromParams()
+  );
+
+  const [searchQuery, setSearchQuery] = useState(() => {
+    return searchParams.get("q") || searchParams.get("search") || "";
+  });
+
+  // Sync state if URL changes (e.g. browser back/forward or footer link navigation)
+  useEffect(() => {
+    setSelectedDepartment(getDepartmentFromParams());
+    const q = searchParams.get("q") || searchParams.get("search");
+    if (q !== null) {
+      setSearchQuery(q);
+    }
+  }, [searchParams, getDepartmentFromParams]);
+
+  const handleSelectDepartment = (dept: MedicalDepartment | "All") => {
+    setSelectedDepartment(dept);
+    const params = new URLSearchParams(searchParams.toString());
+    if (dept === "All") {
+      params.delete("dept");
+      params.delete("department");
+    } else {
+      params.set("dept", dept);
+      params.delete("department");
+    }
+    const qs = params.toString();
+    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchQuery(value);
+    const params = new URLSearchParams(searchParams.toString());
+    if (value.trim()) {
+      params.set("q", value);
+    } else {
+      params.delete("q");
+      params.delete("search");
+    }
+    const qs = params.toString();
+    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+  };
+
+  const handleReset = () => {
+    setSelectedDepartment("All");
+    setSearchQuery("");
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("dept");
+    params.delete("department");
+    params.delete("q");
+    params.delete("search");
+    const qs = params.toString();
+    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+  };
 
   const filteredDoctors: Doctor[] = useMemo(() => {
     return DOCTORS.filter((doctor) => {
@@ -44,6 +115,7 @@ export function DoctorDirectory() {
               placeholder="Search by doctor name, specialty, or condition..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-[10px] bg-paper border border-line text-sm text-ink placeholder:text-ink-soft/70 focus:outline-none focus:border-red transition-colors"
             />
           </div>
@@ -60,6 +132,7 @@ export function DoctorDirectory() {
                   setSelectedDepartment("All");
                   setSearchQuery("");
                 }}
+                onClick={handleReset}
                 className="inline-flex items-center gap-1 text-xs text-red hover:underline cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
@@ -78,6 +151,7 @@ export function DoctorDirectory() {
                 key={dept.value}
                 type="button"
                 onClick={() => setSelectedDepartment(dept.value)}
+                onClick={() => handleSelectDepartment(dept.value)}
                 className={`shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-blue cursor-pointer ${
                   isSelected
                     ? "bg-red text-white shadow-xs"
@@ -114,6 +188,8 @@ export function DoctorDirectory() {
               setSearchQuery("");
             }}
             className="inline-flex items-center justify-center bg-red hover:bg-red-deep text-white text-xs font-semibold px-5 py-2.5 rounded-full transition-colors"
+            onClick={handleReset}
+            className="inline-flex items-center justify-center bg-red hover:bg-red-deep text-white text-xs font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer"
           >
             Show all 16 specialists
           </button>
