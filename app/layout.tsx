@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { MobileStickyBar } from "@/components/mobile-sticky-bar";
 import { CENTRE_INFO } from "@/data/centre";
 
@@ -78,6 +79,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-paper text-ink font-sans flex flex-col pb-16 md:pb-0">
         <Header />
         <main className="flex-1">{children}</main>
+        <Footer />
         <MobileStickyBar />
       </body>
     </html>

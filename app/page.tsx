@@ -1,5 +1,8 @@
 import { Hero } from "@/components/hero";
 import { DoctorPreviewSection } from "@/components/doctor-preview-section";
+import { ServicesPreviewSection } from "@/components/services-preview-section";
+import { FacilityHighlightsSection } from "@/components/facility-highlights-section";
+import { LocationMapSection } from "@/components/location-map-section";
 import { CENTRE_INFO } from "@/data/centre";
 
 export default function Home() {
@@ -62,6 +65,9 @@ export default function Home() {
       />
       <Hero />
       <DoctorPreviewSection />
+      <ServicesPreviewSection />
+      <FacilityHighlightsSection />
+      <LocationMapSection />
     </>
   );
 }
