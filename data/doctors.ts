@@ -404,3 +404,34 @@ export const DEPARTMENTS: { label: string; value: MedicalDepartment | "All" }[] 
   { label: "Psychiatry", value: "Psychiatry" },
 ];
 
+export function getDoctorBySlug(slug: string): Doctor | undefined {
+  return DOCTORS.find((doctor) => doctor.slug === slug);
+}
+
+export function getAllDoctorSlugs(): string[] {
+  return DOCTORS.map((doctor) => doctor.slug);
+}
+
+export function getRelatedDoctors(
+  currentDoctorId: string,
+  department: MedicalDepartment,
+  limit: number = 3
+): Doctor[] {
+  // First look for doctors in the same department
+  const sameDept = DOCTORS.filter(
+    (doc) => doc.id !== currentDoctorId && doc.department === department
+  );
+  if (sameDept.length >= limit) {
+    return sameDept.slice(0, limit);
+  }
+  // Fill remaining slots with other daily specialists
+  const others = DOCTORS.filter(
+    (doc) =>
+      doc.id !== currentDoctorId &&
+      doc.department !== department &&
+      doc.type === "daily"
+  );
+  return [...sameDept, ...others].slice(0, limit);
+}
+
+

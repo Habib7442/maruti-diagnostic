@@ -26,6 +26,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://marutidiagnostic.com"),
   title: {
     default: `${CENTRE_INFO.name} — Trusted Diagnostics & Doctor Chamber in Silchar`,
     template: `%s | ${CENTRE_INFO.name}`,
