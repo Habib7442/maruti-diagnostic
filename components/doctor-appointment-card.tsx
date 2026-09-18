@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Phone, MessageCircle, Clock, Calendar, MapPin, IndianRupee, HelpCircle, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { Phone, Clock, Calendar, MapPin, IndianRupee, HelpCircle, CheckCircle2 } from "lucide-react";
 import { Doctor } from "@/data/doctors";
 import { CENTRE_INFO } from "@/data/centre";
 
@@ -102,9 +103,15 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
           href={`https://wa.me/91${CENTRE_INFO.whatsapp.number}?text=${whatsappMessage}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20 border border-[#25D366]/30 font-medium text-sm transition-colors"
+          className="w-full flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20 border border-[#25D366]/30 font-semibold text-sm transition-colors"
         >
-          <MessageCircle className="w-4 h-4" />
+          <Image
+            src="/social-icons/whatsapp.png"
+            alt="WhatsApp"
+            width={22}
+            height={22}
+            className="w-5 h-5 object-contain shrink-0"
+          />
           <span>WhatsApp Appointment Query</span>
         </a>
 

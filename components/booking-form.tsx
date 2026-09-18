@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import {
   Calendar,
   Clock,
   Phone,
-  MessageCircle,
   CheckCircle2,
   AlertCircle,
   Stethoscope,
@@ -185,8 +185,14 @@ export function BookingForm({
       {/* Sent Confirmation View */}
       {sentSummary ? (
         <div className="py-4 text-center space-y-6 animate-in fade-in duration-300">
-          <div className="w-16 h-16 rounded-full bg-[#25D366]/15 text-[#128C7E] border border-[#25D366]/30 flex items-center justify-center mx-auto shadow-xs">
-            <MessageCircle className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-full bg-[#25D366]/15 border border-[#25D366]/30 flex items-center justify-center mx-auto shadow-xs">
+            <Image
+              src="/social-icons/whatsapp.png"
+              alt="WhatsApp"
+              width={36}
+              height={36}
+              className="w-9 h-9 object-contain"
+            />
           </div>
 
           <div className="max-w-md mx-auto space-y-2">
@@ -230,9 +236,15 @@ export function BookingForm({
               href={sentSummary.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold text-sm transition-colors shadow-xs"
+              className="w-full flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold text-sm transition-colors shadow-xs"
             >
-              <MessageCircle className="w-4 h-4" />
+              <Image
+                src="/social-icons/whatsapp.png"
+                alt="WhatsApp"
+                width={22}
+                height={22}
+                className="w-5 h-5 object-contain shrink-0"
+              />
               <span>Tap to Open WhatsApp Chat</span>
             </a>
 
@@ -477,7 +489,13 @@ export function BookingForm({
               type="submit"
               className="w-full py-4 px-6 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold text-sm sm:text-base transition-all shadow-xs flex items-center justify-center gap-2.5 cursor-pointer active:scale-[0.99]"
             >
-              <MessageCircle className="w-5 h-5 fill-current" />
+              <Image
+                src="/social-icons/whatsapp.png"
+                alt="WhatsApp"
+                width={24}
+                height={24}
+                className="w-6 h-6 object-contain shrink-0"
+              />
               <span>Send Booking on WhatsApp (+91 {CENTRE_INFO.whatsapp.number})</span>
             </button>
 

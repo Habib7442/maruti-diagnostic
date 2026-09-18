@@ -1,4 +1,5 @@
-import { Phone, MessageCircle } from "lucide-react";
+import Image from "next/image";
+import { Phone } from "lucide-react";
 import { CENTRE_INFO } from "@/data/centre";
 
 export function MobileStickyBar() {
@@ -24,7 +25,13 @@ export function MobileStickyBar() {
           className="flex items-center justify-center gap-2 h-12 rounded-full bg-red hover:bg-red-deep text-white font-medium text-sm transition-transform active:scale-[0.98] shadow-xs"
           aria-label="Send WhatsApp message to Maruti Diagnostic Centre"
         >
-          <MessageCircle className="w-4 h-4 stroke-[2.2]" />
+          <Image
+            src="/social-icons/whatsapp.png"
+            alt="WhatsApp"
+            width={22}
+            height={22}
+            className="w-5 h-5 object-contain shrink-0"
+          />
           <span>WhatsApp</span>
         </a>
       </div>
