@@ -59,7 +59,6 @@ export function Hero() {
               <div className="flex items-center gap-1.5 text-ink">
                 <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
                 <span className="font-semibold text-ink">5.0 on Google</span>
-                <span className="text-xs text-ink-soft">(48+ verified reviews)</span>
               </div>
 
               <div className="flex items-center gap-1.5">
