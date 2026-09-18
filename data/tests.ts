@@ -214,7 +214,28 @@ export function getTestBySlug(slug: string): MedicalTest | undefined {
   return TESTS.find((t) => t.slug === slug);
 }
 
+export function getAllTestSlugs(): string[] {
+  return TESTS.map((t) => t.slug);
+}
+
 export function getTestsByCategory(category: TestCategory): MedicalTest[] {
   return TESTS.filter((t) => t.category === category);
+}
+
+export function getRelatedTests(
+  currentTestId: string,
+  category: TestCategory,
+  limit: number = 3
+): MedicalTest[] {
+  const sameCategory = TESTS.filter(
+    (t) => t.id !== currentTestId && t.category === category
+  );
+  if (sameCategory.length >= limit) {
+    return sameCategory.slice(0, limit);
+  }
+  const others = TESTS.filter(
+    (t) => t.id !== currentTestId && t.category !== category
+  );
+  return [...sameCategory, ...others].slice(0, limit);
 }
 

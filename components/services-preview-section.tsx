@@ -103,9 +103,11 @@ export function ServicesPreviewSection() {
 
           <Link
             href="/booking?type=test"
+            href="/tests"
             className="inline-flex items-center gap-2 text-sm font-semibold text-red hover:text-red-deep transition-colors self-start md:self-end"
           >
             <span>Book a test via WhatsApp</span>
+            <span>Explore all tests & scans</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
