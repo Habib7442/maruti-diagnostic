@@ -13,8 +13,12 @@ import {
   FileText,
   CalendarCheck,
 } from "lucide-react";
-import { DOCTORS, getDoctorBySlug, getAllDoctorSlugs, getRelatedDoctors } from "@/data/doctors";
-import { CENTRE_INFO } from "@/data/centre";
+import { getDoctorBySlug, getAllDoctorSlugs, getRelatedDoctors } from "@/data/doctors";
+import { getDoctorFaqs } from "@/data/faqs";
+import { FaqSection } from "@/components/faq-section";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbSchema, physicianSchema, webPageSchema } from "@/lib/schema";
+import { doctorMetadata } from "@/lib/seo";
 import { DoctorAppointmentCard } from "@/components/doctor-appointment-card";
 import { DoctorCard } from "@/components/doctor-card";
 
@@ -40,48 +44,10 @@ export async function generateMetadata({
   const doctor = getDoctorBySlug(slug);
 
   if (!doctor) {
-    return {
-      title: "Doctor Not Found | Maruti Diagnostic Centre",
-    };
+    return { title: "Doctor not found", robots: { index: false } };
   }
 
-  const title = `${doctor.name} — ${doctor.specialty} in Silchar | ${CENTRE_INFO.name}`;
-  const description = `Consult ${doctor.name} (${doctor.qualifications.join(", ")}), ${doctor.specialty} at ${CENTRE_INFO.name}, Ghungoor, Silchar. Timings: ${doctor.chamberTiming}. Call ${CENTRE_INFO.phones.primary} to book consultation.`;
-
-  return {
-    title,
-    description,
-    keywords: [
-      `${doctor.name} Silchar`,
-      `${doctor.name}`,
-      `${doctor.specialty} Silchar`,
-      `${doctor.specialty} Ghungoor`,
-      `best ${doctor.specialty.toLowerCase()} Silchar`,
-      "doctor chamber Silchar",
-      "Maruti Diagnostic Centre doctors",
-      "SMCH Silchar doctor chamber",
-    ],
-    alternates: {
-      canonical: `https://marutidiagnostic.com/doctors/${doctor.slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      url: `https://marutidiagnostic.com/doctors/${doctor.slug}`,
-      type: "profile",
-      siteName: CENTRE_INFO.name,
-      images: doctor.photoUrl
-        ? [
-            {
-              url: doctor.photoUrl,
-              width: 800,
-              height: 800,
-              alt: `${doctor.name} - ${doctor.specialty} in Silchar`,
-            },
-          ]
-        : undefined,
-    },
-  };
+  return doctorMetadata(doctor);
 }
 
 export default async function DoctorPage({ params }: DoctorPageProps) {
@@ -94,48 +60,29 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
 
   const relatedDoctors = getRelatedDoctors(doctor.id, doctor.department, 3);
 
-  // JSON-LD Structured Data: Physician Schema
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Physician",
-    name: doctor.name,
-    medicalSpecialty: doctor.specialty,
-    description: doctor.bio,
-    image: doctor.photoUrl
-      ? `https://marutidiagnostic.com${doctor.photoUrl}`
-      : undefined,
-    telephone: CENTRE_INFO.phones.primary,
-    priceRange: doctor.fee ? `₹${doctor.fee}` : undefined,
-    memberOf: {
-      "@type": "MedicalClinic",
-      name: CENTRE_INFO.name,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: CENTRE_INFO.address.streetAddress,
-        addressLocality: CENTRE_INFO.address.addressLocality,
-        addressRegion: CENTRE_INFO.address.addressRegion,
-        postalCode: CENTRE_INFO.address.postalCode,
-        addressCountry: CENTRE_INFO.address.addressCountry,
-      },
-      telephone: CENTRE_INFO.phones.primary,
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: CENTRE_INFO.geo.latitude,
-        longitude: CENTRE_INFO.geo.longitude,
-      },
-    },
-    availableService: doctor.conditionsTreated.map((condition) => ({
-      "@type": "MedicalProcedure",
-      name: condition,
-    })),
-  };
+  const faqs = getDoctorFaqs(doctor);
+  const pagePath = `/doctors/${doctor.slug}`;
 
   return (
     <>
-      {/* Inject Physician JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          {
+            ...webPageSchema({
+              path: pagePath,
+              name: `${doctor.name} — ${doctor.specialty} in Silchar`,
+              description: doctor.bio,
+              type: "ProfilePage",
+            }),
+            mainEntity: { "@id": physicianSchema(doctor)["@id"] },
+          },
+          physicianSchema(doctor),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Doctors", path: "/doctors" },
+            { name: doctor.name, path: pagePath },
+          ]),
+        ]}
       />
 
       <div className="bg-paper min-h-screen py-6 sm:py-10">
@@ -385,6 +332,10 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 </div>
               </section>
 
+              <FaqSection
+                heading={`Questions about ${doctor.name}`}
+                faqs={faqs}
+              />
             </div>
 
             {/* Sticky Appointment & Booking Sidebar (4 Cols) */}

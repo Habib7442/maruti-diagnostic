@@ -11,25 +11,36 @@ import {
   Calendar,
 } from "lucide-react";
 import { BookingForm } from "@/components/booking-form";
+import { JsonLd } from "@/components/json-ld";
 import { CENTRE_INFO } from "@/data/centre";
+import { breadcrumbSchema, webPageSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Book Doctor Appointment & Diagnostic Tests in Silchar | ${CENTRE_INFO.name}`,
-  description: `Schedule an OPD consultation with 16 consulting specialists or book blood tests, digital X-ray, ultrasound (USG), and ECG at ${CENTRE_INFO.name}, Ghungoor, Silchar.`,
-  keywords: [
-    "book doctor appointment Silchar",
-    "doctor chamber booking Ghungoor",
-    "blood test booking Silchar",
-    "ultrasound appointment Silchar",
-    "Maruti Diagnostic booking",
-  ],
-  alternates: {
-    canonical: "https://marutidiagnostic.com/booking",
-  },
-};
+const PAGE_TITLE = "Book a Test or Doctor Appointment in Silchar";
+const PAGE_DESCRIPTION = `Book an OPD consultation with ${CENTRE_INFO.stats.specialistsCount} specialists or a blood test, digital X-ray, ultrasound (USG) or ECG at ${CENTRE_INFO.name}, Ghungoor, Silchar.`;
+
+export const metadata: Metadata = buildMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  path: "/booking",
+});
 
 export default function BookingPage() {
   return (
+    <>
+    <JsonLd
+      data={[
+        webPageSchema({
+          path: "/booking",
+          name: PAGE_TITLE,
+          description: PAGE_DESCRIPTION,
+        }),
+        breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Book appointment", path: "/booking" },
+        ]),
+      ]}
+    />
     <div className="bg-paper min-h-screen py-6 sm:py-10">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
@@ -136,6 +147,7 @@ export default function BookingPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

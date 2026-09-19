@@ -17,12 +17,16 @@ import {
   Stethoscope,
 } from "lucide-react";
 import {
-  TESTS,
   getTestBySlug,
   getAllTestSlugs,
   getRelatedTests,
 } from "@/data/tests";
 import { CENTRE_INFO } from "@/data/centre";
+import { getTestFaqs } from "@/data/faqs";
+import { FaqSection } from "@/components/faq-section";
+import { JsonLd } from "@/components/json-ld";
+import { breadcrumbSchema, medicalTestSchema } from "@/lib/schema";
+import { testMetadata } from "@/lib/seo";
 import { TestCard } from "@/components/test-card";
 
 interface TestPageProps {
@@ -47,38 +51,10 @@ export async function generateMetadata({
   const test = getTestBySlug(slug);
 
   if (!test) {
-    return {
-      title: "Test Not Found | Maruti Diagnostic Centre",
-    };
+    return { title: "Test not found", robots: { index: false } };
   }
 
-  const title = `${test.name} in Silchar — Rates & Fasting Guide | ${CENTRE_INFO.name}`;
-  const description = `Accurate ${test.name} at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. ${test.shortDescription} Turnaround: ${test.reportTurnaround}. Prep: ${test.preparation}. WhatsApp: ${CENTRE_INFO.whatsapp.display}.`;
-
-  return {
-    title,
-    description,
-    keywords: [
-      `${test.name} Silchar`,
-      `${test.name} cost Silchar`,
-      `${test.name} price Silchar`,
-      `${test.name} preparation`,
-      `${test.category.toLowerCase()} test Silchar`,
-      "diagnostic lab Ghungoor",
-      "blood test opposite SMCH Silchar",
-      "Maruti Diagnostic Centre tests",
-    ],
-    alternates: {
-      canonical: `https://marutidiagnostic.com/tests/${test.slug}`,
-    },
-    openGraph: {
-      title,
-      description,
-      url: `https://marutidiagnostic.com/tests/${test.slug}`,
-      type: "article",
-      siteName: CENTRE_INFO.name,
-    },
-  };
+  return testMetadata(test);
 }
 
 export default async function TestDetailPage({ params }: TestPageProps) {
@@ -95,48 +71,20 @@ export default async function TestDetailPage({ params }: TestPageProps) {
     `Hello Maruti Diagnostic Centre, I would like to book / enquire about the *${test.name}* at your Ghungoor centre (Opp. SMCH). Please let me know available slots & requirements.`
   )}`;
 
-  // JSON-LD Structured Data: DiagnosticProcedure Schema
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "DiagnosticProcedure",
-    name: test.name,
-    description: test.shortDescription,
-    bodyLocation: test.category,
-    howPerformed: test.sampleType,
-    preparation: test.preparation,
-    offers: test.price
-      ? {
-          "@type": "Offer",
-          price: test.price,
-          priceCurrency: "INR",
-          availability: "https://schema.org/InStock",
-        }
-      : undefined,
-    provider: {
-      "@type": "MedicalClinic",
-      name: CENTRE_INFO.name,
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: CENTRE_INFO.address.streetAddress,
-        addressLocality: CENTRE_INFO.address.addressLocality,
-        addressRegion: CENTRE_INFO.address.addressRegion,
-        postalCode: CENTRE_INFO.address.postalCode,
-        addressCountry: CENTRE_INFO.address.addressCountry,
-      },
-      telephone: CENTRE_INFO.phones.primary,
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: CENTRE_INFO.geo.latitude,
-        longitude: CENTRE_INFO.geo.longitude,
-      },
-    },
-  };
+  const faqs = getTestFaqs(test);
+  const pagePath = `/tests/${test.slug}`;
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          ...medicalTestSchema(test),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Tests", path: "/tests" },
+            { name: test.name, path: pagePath },
+          ]),
+        ]}
       />
 
       <div className="bg-paper min-h-screen py-6 sm:py-10">
@@ -454,6 +402,10 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                 </div>
               </aside>
             </div>
+          </div>
+
+          <div className="mt-12 sm:mt-16">
+            <FaqSection heading={`Questions about ${test.name}`} faqs={faqs} />
           </div>
 
           {/* Related Tests Section (Full Width Below Grid) */}

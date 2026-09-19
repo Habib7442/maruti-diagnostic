@@ -3,56 +3,40 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Stethoscope } from "lucide-react";
 import { DoctorDirectory } from "@/components/doctor-directory";
+import { JsonLd } from "@/components/json-ld";
 import { CENTRE_INFO } from "@/data/centre";
 import { DOCTORS } from "@/data/doctors";
+import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Doctor Chamber & 16 Medical Specialists in Silchar | ${CENTRE_INFO.name}`,
-  description: `Find consulting doctors and OPD chamber timings at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. Specialists across Neurosurgery, Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, Dermatology, and Surgery.`,
-  keywords: [
-    "doctor chamber Silchar",
-    "doctors in Silchar",
-    "Ghungoor doctor chamber",
-    "specialist doctors Silchar",
-    "SMCH Silchar doctors",
-    "Maruti Diagnostic Centre doctors",
-    "best doctor in Silchar",
-  ],
-  alternates: {
-    canonical: "https://marutidiagnostic.com/doctors",
-  },
-  openGraph: {
-    title: `Doctor Chamber & 16 Medical Specialists in Silchar | ${CENTRE_INFO.name}`,
-    description: `Find consulting doctors and OPD chamber timings at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar.`,
-    url: "https://marutidiagnostic.com/doctors",
-    type: "website",
-    siteName: CENTRE_INFO.name,
-  },
-};
+const PAGE_TITLE = "Doctors in Silchar — 16 Specialists, Chamber Timings & Fees";
+const PAGE_DESCRIPTION = `Find consulting doctors and OPD chamber timings at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. Specialists across Neurosurgery, Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, Dermatology and Surgery.`;
+
+export const metadata: Metadata = buildMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  path: "/doctors",
+});
 
 export default function DoctorsPage() {
-  // ItemList Schema for rich directory indexing
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Consulting Medical Specialists at Maruti Diagnostic Centre Silchar",
-    itemListElement: DOCTORS.map((doctor, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "Physician",
-        name: doctor.name,
-        medicalSpecialty: doctor.specialty,
-        url: `https://marutidiagnostic.com/doctors/${doctor.slug}`,
-      },
-    })),
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          collectionPageSchema({
+            path: "/doctors",
+            name: PAGE_TITLE,
+            description: PAGE_DESCRIPTION,
+            items: DOCTORS.map((d) => ({
+              name: `${d.name} — ${d.specialty}`,
+              path: `/doctors/${d.slug}`,
+            })),
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Doctors", path: "/doctors" },
+          ]),
+        ]}
       />
 
       <div className="bg-paper min-h-screen py-6 sm:py-10">
@@ -91,7 +75,6 @@ export default function DoctorsPage() {
           </header>
 
           {/* Searchable Directory Grid */}
-          <DoctorDirectory />
           <Suspense
             fallback={
               <div className="py-12 text-center text-ink-soft text-sm">

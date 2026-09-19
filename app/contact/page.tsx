@@ -12,73 +12,40 @@ import {
 } from "lucide-react";
 import { CENTRE_INFO } from "@/data/centre";
 import { BookingForm } from "@/components/booking-form";
+import { FaqSection } from "@/components/faq-section";
+import { JsonLd } from "@/components/json-ld";
+import { getContactFaqs } from "@/data/faqs";
+import { CLINIC_ID, breadcrumbSchema, webPageSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Contact & Chamber Location in Silchar | ${CENTRE_INFO.name}`,
-  description: `Contact ${CENTRE_INFO.name} at ${CENTRE_INFO.landmark}. Phone numbers: ${CENTRE_INFO.phones.displayPrimary}, ${CENTRE_INFO.phones.displaySecondary}. Doctor chamber timings, Google Maps location, and booking form.`,
-  keywords: [
-    "Maruti Diagnostic Centre address",
-    "diagnostic centre Ghungoor Silchar phone number",
-    "Maruti Diagnostic Silchar contact",
-    "doctor chamber opp SMCH Silchar",
-  ],
-  alternates: {
-    canonical: "https://marutidiagnostic.com/contact",
-  },
-};
+const PAGE_TITLE = "Contact & Directions — Opposite SMCH, Ghungoor, Silchar";
+const PAGE_DESCRIPTION = `Contact ${CENTRE_INFO.name} at ${CENTRE_INFO.landmark}. Call ${CENTRE_INFO.phones.displayPrimary} or ${CENTRE_INFO.phones.displaySecondary}, get directions and send a booking enquiry.`;
+
+export const metadata: Metadata = buildMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  path: "/contact",
+});
 
 export default function ContactPage() {
-  // LocalBusiness / MedicalClinic Schema
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "MedicalClinic",
-    name: CENTRE_INFO.name,
-    legalName: CENTRE_INFO.legalName,
-    url: "https://marutidiagnostic.com",
-    logo: "https://marutidiagnostic.com/maruti_diagnostic_centre_logo.png",
-    image: "https://marutidiagnostic.com/maruti-og-image.png",
-    telephone: CENTRE_INFO.phones.primary,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: CENTRE_INFO.address.streetAddress,
-      addressLocality: CENTRE_INFO.address.addressLocality,
-      addressRegion: CENTRE_INFO.address.addressRegion,
-      postalCode: CENTRE_INFO.address.postalCode,
-      addressCountry: CENTRE_INFO.address.addressCountry,
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: CENTRE_INFO.geo.latitude,
-      longitude: CENTRE_INFO.geo.longitude,
-    },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-          "Saturday",
-        ],
-        opens: "07:30",
-        closes: "20:30",
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Sunday"],
-        opens: "08:00",
-        closes: "14:00",
-      },
-    ],
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          {
+            ...webPageSchema({
+              path: "/contact",
+              name: PAGE_TITLE,
+              description: PAGE_DESCRIPTION,
+              type: "ContactPage",
+            }),
+            mainEntity: { "@id": CLINIC_ID },
+          },
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Contact", path: "/contact" },
+          ]),
+        ]}
       />
 
       <div className="bg-paper min-h-screen py-6 sm:py-10">
@@ -300,6 +267,10 @@ export default function ContactPage() {
               />
             </div>
           </section>
+
+          <div className="mt-12">
+            <FaqSection heading="Questions about visiting us" faqs={getContactFaqs()} />
+          </div>
         </div>
       </div>
     </>

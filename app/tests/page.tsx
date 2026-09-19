@@ -2,57 +2,37 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, FlaskConical } from "lucide-react";
 import { TestDirectory } from "@/components/test-directory";
+import { JsonLd } from "@/components/json-ld";
 import { CENTRE_INFO } from "@/data/centre";
 import { TESTS } from "@/data/tests";
+import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Diagnostic Tests & Pathology Lab in Silchar | ${CENTRE_INFO.name}`,
-  description: `Accurate blood tests, digital X-ray, ultrasound (USG), ECG, and endoscopy at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. Check test costs, fasting rules, and turnaround times.`,
-  keywords: [
-    "diagnostic tests Silchar",
-    "blood test Silchar",
-    "pathology lab Silchar",
-    "ultrasound Silchar",
-    "digital X-ray Silchar",
-    "thyroid test Silchar",
-    "CBC test Silchar",
-    "Maruti Diagnostic tests",
-  ],
-  alternates: {
-    canonical: "https://marutidiagnostic.com/tests",
-  },
-  openGraph: {
-    title: `Diagnostic Tests & Pathology Lab in Silchar | ${CENTRE_INFO.name}`,
-    description: `Accurate pathology, digital X-ray, ultrasound (USG), and cardiac testing opposite SMCH, Ghungoor, Silchar.`,
-    url: "https://marutidiagnostic.com/tests",
-    type: "website",
-    siteName: CENTRE_INFO.name,
-  },
-};
+const PAGE_TITLE = "Diagnostic Tests in Silchar — Blood Tests, X-ray, USG, ECG";
+const PAGE_DESCRIPTION = `Blood tests, digital X-ray, ultrasound (USG), ECG and endoscopy at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. See test rates, fasting rules and report times.`;
+
+export const metadata: Metadata = buildMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  path: "/tests",
+});
 
 export default function TestsPage() {
-  // ItemList Schema for tests directory
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    name: "Diagnostic Tests & Medical Scans at Maruti Diagnostic Centre Silchar",
-    itemListElement: TESTS.map((test, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "MedicalWebPage",
-        name: test.name,
-        description: test.shortDescription,
-        url: `https://marutidiagnostic.com/tests/${test.slug}`,
-      },
-    })),
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          collectionPageSchema({
+            path: "/tests",
+            name: PAGE_TITLE,
+            description: PAGE_DESCRIPTION,
+            items: TESTS.map((t) => ({ name: t.name, path: `/tests/${t.slug}` })),
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Tests", path: "/tests" },
+          ]),
+        ]}
       />
 
       <div className="bg-paper min-h-screen py-6 sm:py-10">

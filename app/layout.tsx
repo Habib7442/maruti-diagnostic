@@ -4,7 +4,10 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { MobileStickyBar } from "@/components/mobile-sticky-bar";
+import { JsonLd } from "@/components/json-ld";
 import { CENTRE_INFO } from "@/data/centre";
+import { clinicSchema, websiteSchema } from "@/lib/schema";
+import { SEO, SITE_URL, verificationMeta } from "@/lib/seo";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -27,32 +30,18 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://marutidiagnostic.com"),
+  metadataBase: new URL(SITE_URL),
+  applicationName: CENTRE_INFO.name,
   title: {
-    default: `${CENTRE_INFO.name} — Trusted Diagnostics & Doctor Chamber in Silchar`,
+    default: SEO.defaultTitle,
     template: `%s | ${CENTRE_INFO.name}`,
   },
-  description: `${CENTRE_INFO.name} at ${CENTRE_INFO.landmark}. Daily chamber for 16 medical specialists and high-precision pathology, digital X-ray, ultrasound (USG), ECG, and endoscopy.`,
-  keywords: [
-    "diagnostic centre Silchar",
-    "doctor chamber Silchar",
-    "blood test Silchar",
-    "Ghungoor diagnostic",
-    "SMCH Silchar doctors",
-    "pathology lab Silchar",
-    "ultrasound Silchar",
-    "digital X-ray Silchar",
-  ],
+  description: SEO.defaultDescription,
   authors: [{ name: CENTRE_INFO.name }],
   creator: CENTRE_INFO.name,
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: "https://marutidiagnostic.com",
-    title: `${CENTRE_INFO.name} — Diagnostics & 16 Specialists in Silchar`,
-    description: "Daily chamber for 16 medical specialists. Accurate pathology, digital X-ray, ultrasound, ECG, and endoscopy opposite SMCH, Ghungoor, Silchar.",
-    siteName: CENTRE_INFO.name,
-  },
+  publisher: CENTRE_INFO.name,
+  category: "health",
+  verification: verificationMeta(),
   icons: {
     icon: [
       { url: "/favicon.ico" },
@@ -77,6 +66,7 @@ export default function RootLayout({
       className={`${fraunces.variable} ${hankenGrotesk.variable} antialiased selection:bg-red/10 selection:text-red`}
     >
       <body className="min-h-screen bg-paper text-ink font-sans flex flex-col pb-16 md:pb-0">
+        <JsonLd data={[clinicSchema(), websiteSchema()]} />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

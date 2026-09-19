@@ -32,7 +32,17 @@ export interface CentreInfo {
     weekday: string;
     sunday: string;
   };
+  openingHours: { days: string[]; opens: string; closes: string }[];
   googleMapsUrl: string;
+  /** Profiles that confirm the business exists (GBP, Justdial, Practo, social). Empty until supplied by the client. */
+  sameAs: string[];
+  /** Schema.org data is emitted only for facts flagged true here. Flip after client confirmation. */
+  verified: {
+    hours: boolean;
+    geo: boolean;
+    whatsapp: boolean;
+    aggregateRating: boolean;
+  };
   stats: {
     specialistsCount: number;
     googleRating: number;
@@ -75,7 +85,22 @@ export const CENTRE_INFO: CentreInfo = {
     weekday: "Monday - Saturday: 7:30 AM - 8:30 PM",
     sunday: "Sunday: 8:00 AM - 2:00 PM",
   },
+  openingHours: [
+    {
+      days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "07:30",
+      closes: "20:30",
+    },
+    { days: ["Sunday"], opens: "08:00", closes: "14:00" },
+  ],
   googleMapsUrl: "https://maps.google.com/?q=Maruti+Diagnostic+Centre+Silchar",
+  sameAs: [],
+  verified: {
+    hours: false,
+    geo: false,
+    whatsapp: false,
+    aggregateRating: false,
+  },
   stats: {
     specialistsCount: 16,
     googleRating: 5.0,

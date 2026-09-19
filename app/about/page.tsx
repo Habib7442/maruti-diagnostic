@@ -16,29 +16,19 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import { JsonLd } from "@/components/json-ld";
 import { CENTRE_INFO } from "@/data/centre";
+import { breadcrumbSchema, webPageSchema } from "@/lib/schema";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `About Us — Trusted Diagnostics & Doctor Chamber | ${CENTRE_INFO.name}`,
-  description: `Learn about ${CENTRE_INFO.name} at SMC Point, Ghungoor, Silchar (opposite SMCH). Daily chamber for 16 medical specialists and automated laboratory diagnostics serving Cachar and the Barak Valley.`,
-  keywords: [
-    "about Maruti Diagnostic Centre",
-    "diagnostic centre Ghungoor Silchar",
-    "doctor chamber opp SMCH",
-    "pathology lab Silchar history",
-    "medical specialists Silchar",
-  ],
-  alternates: {
-    canonical: "https://marutidiagnostic.com/about",
-  },
-  openGraph: {
-    title: `About Us — Trusted Diagnostics & Doctor Chamber | ${CENTRE_INFO.name}`,
-    description: `Discover ${CENTRE_INFO.name}, Ghungoor, Silchar (opposite SMCH). 16 consulting specialists and automated laboratory testing.`,
-    url: "https://marutidiagnostic.com/about",
-    type: "website",
-    siteName: CENTRE_INFO.name,
-  },
-};
+const PAGE_TITLE = "About Us — Diagnostics & Doctor Chamber in Ghungoor, Silchar";
+const PAGE_DESCRIPTION = `About ${CENTRE_INFO.name} at SMC Point, Ghungoor, Silchar (opposite SMCH). Daily chamber for ${CENTRE_INFO.stats.specialistsCount} medical specialists with pathology, X-ray, ultrasound, ECG and endoscopy.`;
+
+export const metadata: Metadata = buildMetadata({
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  path: "/about",
+});
 
 export default function AboutPage() {
   const stats = [
@@ -122,39 +112,21 @@ export default function AboutPage() {
     },
   ];
 
-  // Schema markup
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    name: `About ${CENTRE_INFO.name}`,
-    description: `About ${CENTRE_INFO.name}, a trusted diagnostic laboratory and 16-specialist medical chamber located opposite SMCH, Ghungoor, Silchar.`,
-    mainEntity: {
-      "@type": "MedicalClinic",
-      name: CENTRE_INFO.name,
-      legalName: CENTRE_INFO.legalName,
-      telephone: CENTRE_INFO.phones.primary,
-      url: "https://marutidiagnostic.com",
-      address: {
-        "@type": "PostalAddress",
-        streetAddress: CENTRE_INFO.address.streetAddress,
-        addressLocality: CENTRE_INFO.address.addressLocality,
-        addressRegion: CENTRE_INFO.address.addressRegion,
-        postalCode: CENTRE_INFO.address.postalCode,
-        addressCountry: CENTRE_INFO.address.addressCountry,
-      },
-      geo: {
-        "@type": "GeoCoordinates",
-        latitude: CENTRE_INFO.geo.latitude,
-        longitude: CENTRE_INFO.geo.longitude,
-      },
-    },
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd
+        data={[
+          webPageSchema({
+            path: "/about",
+            name: PAGE_TITLE,
+            description: PAGE_DESCRIPTION,
+            type: "AboutPage",
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+        ]}
       />
 
       <div className="bg-paper min-h-screen py-6 sm:py-10">

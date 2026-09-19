@@ -408,6 +408,10 @@ export function getDoctorBySlug(slug: string): Doctor | undefined {
   return DOCTORS.find((doctor) => doctor.slug === slug);
 }
 
+export function hasVerifiedRegistration(doctor: Doctor): boolean {
+  return !/pending/i.test(doctor.registrationNo);
+}
+
 export function getAllDoctorSlugs(): string[] {
   return DOCTORS.map((doctor) => doctor.slug);
 }
