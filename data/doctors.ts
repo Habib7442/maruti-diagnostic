@@ -31,7 +31,7 @@ export interface Doctor {
   displayOrder: number;
 }
 
-export const DOCTORS: Doctor[] = [
+const DOCTOR_RECORDS: Doctor[] = [
   // --- Daily chamber (owner's chamber board) ---
   {
     id: "dr-surajit-kr-sen",
@@ -51,7 +51,7 @@ export const DOCTORS: Doctor[] = [
       "Sleep problems and insomnia",
       "Memory and behaviour changes",
     ],
-    displayOrder: 1,
+    displayOrder: 6,
   },
   {
     id: "dr-rajsekhar-chakraborty",
@@ -71,7 +71,7 @@ export const DOCTORS: Doctor[] = [
       "Fever and infections",
       "Cough and breathing complaints",
     ],
-    displayOrder: 2,
+    displayOrder: 7,
   },
   {
     id: "dr-rieona-saha",
@@ -91,7 +91,7 @@ export const DOCTORS: Doctor[] = [
       "Infertility evaluation",
       "Pelvic pain and infections",
     ],
-    displayOrder: 3,
+    displayOrder: 8,
   },
   {
     id: "dr-saleha-choudhury",
@@ -111,7 +111,7 @@ export const DOCTORS: Doctor[] = [
       "Vertigo and dizziness",
       "Allergic rhinitis",
     ],
-    displayOrder: 4,
+    displayOrder: 9,
   },
   {
     id: "dr-bashab-bijoy-roy",
@@ -131,7 +131,7 @@ export const DOCTORS: Doctor[] = [
       "Piles, fissure and fistula",
       "Lumps and minor surgical problems",
     ],
-    displayOrder: 5,
+    displayOrder: 10,
   },
   {
     id: "dr-sourav-nath",
@@ -151,7 +151,7 @@ export const DOCTORS: Doctor[] = [
       "Fever and viral illness",
       "Routine health check-ups",
     ],
-    displayOrder: 6,
+    displayOrder: 11,
   },
   {
     id: "dr-n-hrangchal",
@@ -171,7 +171,7 @@ export const DOCTORS: Doctor[] = [
       "Ligament and tendon injuries",
       "Frozen shoulder",
     ],
-    displayOrder: 7,
+    displayOrder: 12,
   },
   {
     id: "dr-sujit-nath-choudhury",
@@ -191,7 +191,7 @@ export const DOCTORS: Doctor[] = [
       "Vaccination advice",
       "Stomach upsets in children",
     ],
-    displayOrder: 8,
+    displayOrder: 13,
   },
   {
     id: "dr-fakrul-islam-mozumder",
@@ -211,7 +211,7 @@ export const DOCTORS: Doctor[] = [
       "Foreign body in ear or nose",
       "Hoarse voice",
     ],
-    displayOrder: 9,
+    displayOrder: 14,
   },
 
   // --- Associated doctors (by appointment) ---
@@ -238,7 +238,7 @@ export const DOCTORS: Doctor[] = [
       "Brain tumour evaluation",
       "Neck pain and cervical spondylosis",
     ],
-    displayOrder: 10,
+    displayOrder: 15,
   },
   {
     id: "dr-shromona-kar",
@@ -262,7 +262,7 @@ export const DOCTORS: Doctor[] = [
       "Hair fall",
       "Pigmentation and melasma",
     ],
-    displayOrder: 11,
+    displayOrder: 16,
   },
   {
     id: "dr-ayan-purkayastha",
@@ -281,7 +281,7 @@ export const DOCTORS: Doctor[] = [
       "High cholesterol",
       "High blood pressure",
     ],
-    displayOrder: 12,
+    displayOrder: 1,
   },
   {
     id: "dr-sauradeep-sarkar",
@@ -300,7 +300,7 @@ export const DOCTORS: Doctor[] = [
       "Piles and fissure",
       "Abdominal surgical opinions",
     ],
-    displayOrder: 13,
+    displayOrder: 2,
   },
   {
     id: "dr-bagdatta-paul",
@@ -319,7 +319,7 @@ export const DOCTORS: Doctor[] = [
       "Deviated nasal septum",
       "Throat and voice problems",
     ],
-    displayOrder: 14,
+    displayOrder: 3,
   },
   {
     id: "dr-siddhartha-k-dutta",
@@ -345,7 +345,7 @@ export const DOCTORS: Doctor[] = [
       "Irritable bowel and indigestion",
       "Diabetes",
     ],
-    displayOrder: 15,
+    displayOrder: 4,
   },
   {
     id: "dr-mina-mazumder",
@@ -364,9 +364,17 @@ export const DOCTORS: Doctor[] = [
       "Fever and cough in children",
       "Growth and development checks",
     ],
-    displayOrder: 16,
+    displayOrder: 5,
   },
 ];
+
+/**
+ * Every list on the site (home preview, directory, footer, sitemap) follows displayOrder.
+ * The owner's main associated doctors come first, in the order of their banner.
+ */
+export const DOCTORS: Doctor[] = [...DOCTOR_RECORDS].sort(
+  (a, b) => a.displayOrder - b.displayOrder
+);
 
 export const DAILY_DOCTOR_COUNT = DOCTORS.filter((d) => d.type === "daily").length;
 
