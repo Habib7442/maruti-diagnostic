@@ -6,17 +6,28 @@ import {
   Activity,
   FileCheck2,
   Clock,
-  ArrowRight,
   ShieldCheck,
 } from "lucide-react";
 import { CENTRE_INFO } from "@/data/centre";
+
+/** Links a listed investigation to its dedicated test page. */
+const TEST_LINKS: Record<string, string> = {
+  "Complete Blood Count (CBC)": "cbc-test-silchar",
+  "Thyroid Profile (T3, T4, TSH)": "thyroid-profile-test-silchar",
+  "Blood Sugar (Fasting & PP)": "blood-glucose-test-silchar",
+  "HbA1c Glycated Haemoglobin": "hba1c-test-silchar",
+  "Lipid & Cholesterol Profile": "lipid-profile-test-silchar",
+  "Whole Abdomen & Pelvis USG": "ultrasound-whole-abdomen-silchar",
+  "Digital Chest X-Ray (PA View)": "digital-x-ray-chest-silchar",
+  "12-Lead Electrocardiogram (ECG)": "ecg-test-silchar",
+};
 
 export function ServicesPreviewSection() {
   const services = [
     {
       title: "Pathology & Biochemistry",
       icon: FlaskConical,
-      badge: "Same-Day Reports",
+      badge: "Same-day reports",
       description:
         "Comprehensive blood, serum, and urine diagnostics processed on automated clinical analyzers with strict quality control.",
       popularTests: [
@@ -28,13 +39,13 @@ export function ServicesPreviewSection() {
         "Liver & Kidney Function Tests (LFT / KFT)",
       ],
       turnaround: "Reports ready by same-day evening",
-      actionText: "Book Blood Test",
+      actionText: "Book a blood test",
       actionHref: "/booking?type=test",
     },
     {
       title: "High-Resolution Ultrasound (USG)",
       icon: Scan,
-      badge: "Expert Sonology",
+      badge: "Ultrasound",
       description:
         "Detailed sonographic imaging of abdominal and pelvic anatomy, aiding early detection of stones, fatty liver, and soft tissue pathologies.",
       popularTests: [
@@ -44,13 +55,13 @@ export function ServicesPreviewSection() {
         "Upper Abdominal Sonography",
       ],
       turnaround: "Report ready within 1 to 2 hours of scan",
-      actionText: "Schedule USG Scan",
+      actionText: "Book an ultrasound",
       actionHref: "/booking?type=test",
     },
     {
       title: "Digital Radiography (X-Ray)",
       icon: Activity,
-      badge: "Low-Dose Digital",
+      badge: "Digital X-ray",
       description:
         "High-definition digital X-rays offering crystal-clear bone, chest, and joint visualization with reduced radiation exposure.",
       popularTests: [
@@ -60,13 +71,13 @@ export function ServicesPreviewSection() {
         "Abdominal & Pelvic Radiography",
       ],
       turnaround: "Film & digital report in 30 to 45 mins",
-      actionText: "Book Digital X-Ray",
+      actionText: "Book an X-ray",
       actionHref: "/booking?type=test",
     },
     {
       title: "Cardiac ECG & Video Endoscopy",
       icon: FileCheck2,
-      badge: "Physician Review",
+      badge: "ECG and endoscopy",
       description:
         "Critical non-invasive cardiac evaluation alongside specialized upper gastrointestinal video endoscopy for diagnostic clarity.",
       popularTests: [
@@ -76,7 +87,7 @@ export function ServicesPreviewSection() {
         "GERD & Peptic Ulcer Evaluation",
       ],
       turnaround: "Immediate ECG readouts; same-day endoscopy",
-      actionText: "Enquire Investigation",
+      actionText: "Book ECG or endoscopy",
       actionHref: "/booking?type=test",
     },
   ];
@@ -103,10 +114,9 @@ export function ServicesPreviewSection() {
 
           <Link
             href="/tests"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-red hover:text-red-deep transition-colors self-start md:self-end"
+            className="inline-flex items-center min-h-12 text-sm font-semibold text-red-deep hover:underline self-start md:self-end"
           >
-            <span>Explore all tests & scans</span>
-            <ArrowRight className="w-4 h-4" />
+            See all tests and scans
           </Link>
         </div>
 
@@ -117,7 +127,7 @@ export function ServicesPreviewSection() {
             return (
               <article
                 key={index}
-                className="bg-surface border border-line rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-ink/20 transition-all hover:shadow-xs"
+                className="bg-surface border border-line rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col justify-between hover:border-ink/20 transition-colors"
               >
                 <div>
                   <div className="flex items-center justify-between gap-3 mb-5">
@@ -139,19 +149,28 @@ export function ServicesPreviewSection() {
 
                   {/* Common Investigations List */}
                   <div className="space-y-2 mb-6">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft block">
-                      Common Investigations
-                    </span>
+                    <h4 className="text-sm font-semibold text-ink">
+                      Common tests
+                    </h4>
                     <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-ink">
-                      {service.popularTests.map((testName, i) => (
-                        <li
-                          key={i}
-                          className="flex items-center gap-2 bg-paper px-3 py-2 rounded-lg border border-line/60"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-red shrink-0" />
-                          <span className="truncate">{testName}</span>
-                        </li>
-                      ))}
+                      {service.popularTests.map((testName) => {
+                        const slug = TEST_LINKS[testName];
+                        return (
+                          <li
+                            key={testName}
+                            className="flex items-center gap-2 bg-paper px-3 py-2 rounded-lg border border-line/60"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-red shrink-0" />
+                            {slug ? (
+                              <Link href={`/tests/${slug}`} className="hover:text-red-deep hover:underline">
+                                {testName}
+                              </Link>
+                            ) : (
+                              <span>{testName}</span>
+                            )}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 </div>
@@ -165,10 +184,9 @@ export function ServicesPreviewSection() {
 
                   <Link
                     href={service.actionHref}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full bg-paper hover:bg-red hover:text-white border border-line text-xs font-semibold text-ink transition-colors"
+                    className="inline-flex items-center justify-center min-h-12 px-5 rounded-full bg-paper hover:bg-red hover:text-white border border-line text-sm font-semibold text-ink transition-colors"
                   >
-                    <span>{service.actionText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    {service.actionText}
                   </Link>
                 </div>
               </article>
@@ -184,10 +202,10 @@ export function ServicesPreviewSection() {
             </div>
             <div>
               <h4 className="font-semibold text-ink text-base">
-                Have a Doctor&apos;s Prescription or Need Morning Fasting Tests?
+                Have a prescription from your doctor?
               </h4>
               <p className="text-xs sm:text-sm text-ink-soft mt-0.5">
-                Our blood collection counter opens daily at 7:30 AM. Walk-in patients from SMCH and across Silchar are welcome.
+                Send a photo on WhatsApp and we will tell you the preparation and timing, or call to book your test. Walk-in patients are welcome.
               </p>
             </div>
           </div>

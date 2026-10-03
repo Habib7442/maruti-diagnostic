@@ -1,122 +1,91 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams, usePathname } from "next/navigation";
 import { Search, Stethoscope, Phone, RotateCcw } from "lucide-react";
-import { DOCTORS, DEPARTMENTS, MedicalDepartment, Doctor } from "@/data/doctors";
+import { DOCTORS, DEPARTMENTS, type MedicalDepartment } from "@/data/doctors";
 import { DoctorCard } from "@/components/doctor-card";
 import { CENTRE_INFO } from "@/data/centre";
+
+type DepartmentFilter = MedicalDepartment | "All";
+
+function departmentFromParam(raw: string | null): DepartmentFilter {
+  if (!raw) return "All";
+  const match = DEPARTMENTS.find(
+    (d) => d.value.toLowerCase() === raw.trim().toLowerCase()
+  );
+  return match ? match.value : "All";
+}
 
 export function DoctorDirectory() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const getDepartmentFromParams = useCallback((): MedicalDepartment | "All" => {
-    const rawDept = searchParams.get("dept") || searchParams.get("department");
-    if (rawDept) {
-      const matched = DEPARTMENTS.find(
-        (d) => d.value.toLowerCase() === rawDept.trim().toLowerCase()
-      );
-      if (matched) return matched.value;
-    }
-    return "All";
-  }, [searchParams]);
-
-  const [selectedDepartment, setSelectedDepartment] = useState<MedicalDepartment | "All">(() =>
-    getDepartmentFromParams()
+  // The URL is the source of truth for the department, so footer links and back/forward stay in sync.
+  const selectedDepartment = departmentFromParam(
+    searchParams.get("dept") || searchParams.get("department")
+  );
+  const [searchQuery, setSearchQuery] = useState(
+    () => searchParams.get("q") || searchParams.get("search") || ""
   );
 
-  const [searchQuery, setSearchQuery] = useState(() => {
-    return searchParams.get("q") || searchParams.get("search") || "";
-  });
-
-  // Sync state if URL changes (e.g. browser back/forward or footer link navigation)
-  useEffect(() => {
-    setSelectedDepartment(getDepartmentFromParams());
-    const q = searchParams.get("q") || searchParams.get("search");
-    if (q !== null) {
-      setSearchQuery(q);
-    }
-  }, [searchParams, getDepartmentFromParams]);
-
-  const handleSelectDepartment = (dept: MedicalDepartment | "All") => {
-    setSelectedDepartment(dept);
+  const updateUrl = (dept: DepartmentFilter, q: string) => {
     const params = new URLSearchParams(searchParams.toString());
-    if (dept === "All") {
-      params.delete("dept");
-      params.delete("department");
-    } else {
-      params.set("dept", dept);
-      params.delete("department");
-    }
+    params.delete("department");
+    params.delete("search");
+    if (dept === "All") params.delete("dept");
+    else params.set("dept", dept);
+    if (q.trim()) params.set("q", q);
+    else params.delete("q");
     const qs = params.toString();
     window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
   };
 
   const handleSearchChange = (value: string) => {
     setSearchQuery(value);
-    const params = new URLSearchParams(searchParams.toString());
-    if (value.trim()) {
-      params.set("q", value);
-    } else {
-      params.delete("q");
-      params.delete("search");
-    }
-    const qs = params.toString();
-    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+    updateUrl(selectedDepartment, value);
   };
 
   const handleReset = () => {
-    setSelectedDepartment("All");
     setSearchQuery("");
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("dept");
-    params.delete("department");
-    params.delete("q");
-    params.delete("search");
-    const qs = params.toString();
-    window.history.replaceState(null, "", qs ? `${pathname}?${qs}` : pathname);
+    updateUrl("All", "");
   };
 
-  const filteredDoctors: Doctor[] = useMemo(() => {
+  const filteredDoctors = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
     return DOCTORS.filter((doctor) => {
-      const matchesDept =
-        selectedDepartment === "All" || doctor.department === selectedDepartment;
-
-      if (!matchesDept) return false;
-
-      if (!searchQuery.trim()) return true;
-
-      const q = searchQuery.toLowerCase();
-      const matchName = doctor.name.toLowerCase().includes(q);
-      const matchSpecialty = doctor.specialty.toLowerCase().includes(q);
-      const matchDept = doctor.department.toLowerCase().includes(q);
-      const matchConditions = doctor.conditionsTreated.some((c) =>
-        c.toLowerCase().includes(q)
+      if (selectedDepartment !== "All" && doctor.department !== selectedDepartment) {
+        return false;
+      }
+      if (!q) return true;
+      return (
+        doctor.name.toLowerCase().includes(q) ||
+        doctor.specialty.toLowerCase().includes(q) ||
+        doctor.department.toLowerCase().includes(q) ||
+        doctor.conditionsTreated.some((c) => c.toLowerCase().includes(q))
       );
-
-      return matchName || matchSpecialty || matchDept || matchConditions;
     });
   }, [selectedDepartment, searchQuery]);
 
   return (
     <div>
       {/* Search and Filter Controls */}
-      <div className="bg-surface border border-line rounded-2xl p-5 sm:p-6 mb-8 shadow-xs">
+      <div className="bg-surface border border-line rounded-2xl p-5 sm:p-6 mb-8">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-5">
           {/* Search Input */}
           <div className="relative flex-1 max-w-md">
             <Search className="w-4 h-4 text-ink-soft absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
-              type="text"
-              placeholder="Search by doctor name, specialty, or condition..."
+              type="search"
+              aria-label="Search doctors by name, specialty or condition"
+              placeholder="Search by doctor name, specialty, or condition"
               value={searchQuery}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-[10px] bg-paper border border-line text-sm text-ink placeholder:text-ink-soft/70 focus:outline-none focus:border-red transition-colors"
+              className="w-full min-h-12 pl-10 pr-4 rounded-[10px] bg-paper border border-line text-base text-ink placeholder:text-ink-soft/70 focus:outline-none focus:border-red transition-colors"
             />
           </div>
 
-          <div className="text-xs text-ink-soft flex items-center justify-between md:justify-end gap-3">
+          <div className="text-sm text-ink-soft flex items-center justify-between md:justify-end gap-3" aria-live="polite">
             <span>
               Showing <strong className="text-ink font-semibold">{filteredDoctors.length}</strong> of{" "}
               {DOCTORS.length} specialists
@@ -125,9 +94,9 @@ export function DoctorDirectory() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="inline-flex items-center gap-1 text-xs text-red hover:underline cursor-pointer"
+                className="inline-flex items-center gap-1 min-h-12 px-2 text-sm text-red-deep hover:underline cursor-pointer"
               >
-                <RotateCcw className="w-3 h-3" />
+                <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset</span>
               </button>
             )}
@@ -142,10 +111,11 @@ export function DoctorDirectory() {
               <button
                 key={dept.value}
                 type="button"
-                onClick={() => handleSelectDepartment(dept.value)}
-                className={`shrink-0 px-4 py-2 rounded-full text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-blue cursor-pointer ${
+                aria-pressed={isSelected}
+                onClick={() => updateUrl(dept.value, searchQuery)}
+                className={`shrink-0 min-h-12 px-5 rounded-full text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-blue cursor-pointer ${
                   isSelected
-                    ? "bg-red text-white shadow-xs"
+                    ? "bg-red text-white"
                     : "bg-paper hover:bg-clay/40 border border-line text-ink"
                 }`}
               >
@@ -167,17 +137,17 @@ export function DoctorDirectory() {
         <div className="bg-surface border border-line rounded-2xl p-10 text-center max-w-lg mx-auto my-8">
           <Stethoscope className="w-8 h-8 text-ink-soft mx-auto mb-3" />
           <h3 className="text-ink font-display font-medium text-lg mb-2">
-            No doctors match your criteria
+            No doctors match your search
           </h3>
           <p className="text-ink-soft text-sm mb-6 leading-relaxed">
-            We couldn&apos;t find any doctors matching &quot;{searchQuery}&quot;. Try adjusting your search query or clear the filter.
+            We couldn&apos;t find any doctors matching &quot;{searchQuery}&quot;. Try a different word or clear the filter.
           </p>
           <button
             type="button"
             onClick={handleReset}
-            className="inline-flex items-center justify-center bg-red hover:bg-red-deep text-white text-xs font-semibold px-5 py-2.5 rounded-full transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center min-h-12 bg-red hover:bg-red-deep text-white text-sm font-semibold px-6 rounded-full transition-colors cursor-pointer"
           >
-            Show all 16 specialists
+            Show all {DOCTORS.length} specialists
           </button>
         </div>
       )}
@@ -188,17 +158,17 @@ export function DoctorDirectory() {
           <h3 className="font-semibold text-ink text-base">
             Can&apos;t find the right specialist or timing?
           </h3>
-          <p className="text-xs sm:text-sm text-ink-soft mt-0.5">
-            Call our front desk to confirm daily OPD timings, token availability, or emergency visiting doctors.
+          <p className="text-sm text-ink-soft mt-0.5">
+            Call our front desk to confirm chamber timings, tokens, or appointments with associated doctors.
           </p>
         </div>
 
         <a
           href={`tel:${CENTRE_INFO.phones.primary}`}
-          className="inline-flex items-center gap-2 bg-red hover:bg-red-deep text-white text-xs sm:text-sm font-semibold px-5 py-2.5 rounded-full transition-colors shrink-0 shadow-xs"
+          className="inline-flex items-center gap-2 min-h-12 bg-red hover:bg-red-deep text-white text-sm font-semibold px-5 rounded-full transition-colors shrink-0"
         >
           <Phone className="w-4 h-4" />
-          <span>Call Reception: {CENTRE_INFO.phones.displayPrimary}</span>
+          <span>Call reception: {CENTRE_INFO.phones.displayPrimary}</span>
         </a>
       </div>
     </div>

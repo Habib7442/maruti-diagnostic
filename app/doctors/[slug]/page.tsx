@@ -7,13 +7,18 @@ import {
   MapPin,
   Award,
   ChevronRight,
-  ShieldCheck,
   Stethoscope,
   Activity,
   FileText,
   CalendarCheck,
 } from "lucide-react";
-import { getDoctorBySlug, getAllDoctorSlugs, getRelatedDoctors } from "@/data/doctors";
+import {
+  DOCTORS,
+  getDoctorBySlug,
+  getAllDoctorSlugs,
+  getDoctorInitials,
+  getRelatedDoctors,
+} from "@/data/doctors";
 import { getDoctorFaqs } from "@/data/faqs";
 import { FaqSection } from "@/components/faq-section";
 import { JsonLd } from "@/components/json-ld";
@@ -28,7 +33,7 @@ interface DoctorPageProps {
   }>;
 }
 
-// Statically prerender all 16 doctor pages at build time
+// Statically prerender every doctor page at build time
 export async function generateStaticParams() {
   const slugs = getAllDoctorSlugs();
   return slugs.map((slug) => ({
@@ -126,8 +131,11 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     className="object-cover w-full h-full"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center font-display text-3xl text-ink font-semibold bg-clay/40">
-                    {doctor.name.replace(/^Dr\.\s*/, "").slice(0, 2)}
+                  <div
+                    aria-hidden="true"
+                    className="w-full h-full flex items-center justify-center font-display text-3xl text-ink font-semibold bg-clay/40"
+                  >
+                    {getDoctorInitials(doctor.name)}
                   </div>
                 )}
               </div>
@@ -143,24 +151,14 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     }`}
                   >
                     {doctor.type === "daily"
-                      ? "Daily OPD Chamber"
-                      : "Visiting Specialist"}
+                      ? "Daily chamber"
+                      : "By appointment"}
                   </span>
 
                   <span className="text-xs font-medium px-3 py-1 rounded-full bg-paper border border-line text-ink-soft">
                     {doctor.department}
                   </span>
 
-                  {doctor.registrationNo && (
-                    <span className="text-xs font-normal px-2.5 py-1 rounded-full bg-paper/60 border border-line/80 text-ink-soft inline-flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-blue" />
-                      <span>
-                        {doctor.registrationNo === "Verification pending"
-                          ? "Reg. verification pending"
-                          : `Reg. No: ${doctor.registrationNo}`}
-                      </span>
-                    </span>
-                  )}
                 </div>
 
                 {/* Primary H1 for SEO */}
@@ -205,7 +203,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                   </h2>
                 </div>
 
-                <div className="prose prose-slate max-w-none text-ink/90 text-base sm:text-[17px] leading-relaxed space-y-4">
+                <div className="text-ink/90 text-base sm:text-[17px] leading-relaxed space-y-4">
                   <p>{doctor.bio}</p>
 
                   <p>
@@ -223,7 +221,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-line">
                   <Activity className="w-5 h-5 text-red shrink-0" />
                   <h2 className="font-display font-medium text-xl sm:text-2xl text-ink">
-                    Clinical Focus & Conditions Treated
+                    Conditions treated
                   </h2>
                 </div>
 
@@ -251,7 +249,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-line">
                   <CalendarCheck className="w-5 h-5 text-blue shrink-0" />
                   <h2 className="font-display font-medium text-xl sm:text-2xl text-ink">
-                    How Consultations Work at Maruti Diagnostic
+                    How consultations work
                   </h2>
                 </div>
 
@@ -262,7 +260,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     </span>
                     <div>
                       <strong className="text-ink font-medium block">
-                        Token & Counter Registration
+                        Token and registration
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
                         Consultation tokens are allocated on a daily basis at
@@ -280,12 +278,12 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     </span>
                     <div>
                       <strong className="text-ink font-medium block">
-                        Diagnostic Reports & On-site Testing
+                        Tests on the same visit
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
                         If {doctor.name} advises diagnostic investigations (such
                         as blood pathology, digital X-rays, ultrasound, or ECG),
-                        our integrated NABL-guided laboratory and imaging unit
+                        the laboratory and imaging unit in the same building
                         can process tests on-site for prompt review.
                       </p>
                     </div>
@@ -297,7 +295,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     </span>
                     <div>
                       <strong className="text-ink font-medium block">
-                        Prescription & Follow-up Care
+                        Prescription and follow-up
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
                         Receive your medical prescription, dosage schedule, and
@@ -314,7 +312,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     <FileText className="w-5 h-5 text-blue shrink-0" />
                     <div>
                       <span className="text-xs font-semibold text-ink block">
-                        Need Diagnostic Tests Prescribed by {doctor.name}?
+                        Tests prescribed by {doctor.name}?
                       </span>
                       <span className="text-xs text-ink-soft">
                         Pathology, Digital X-Ray, USG, and ECG all under one
@@ -327,7 +325,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                     href="/tests"
                     className="inline-flex items-center justify-center text-xs font-medium bg-surface hover:bg-ink hover:text-white border border-line px-4 py-2 rounded-full text-ink transition-colors shrink-0"
                   >
-                    View Test Catalogue
+                    View all tests
                   </Link>
                 </div>
               </section>
@@ -350,7 +348,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
               <div className="flex items-baseline justify-between mb-6">
                 <div>
                   <h2 className="font-display font-medium text-2xl sm:text-3xl text-ink">
-                    Other Consulting Specialists
+                    Other specialists at Maruti
                   </h2>
                   <p className="text-xs sm:text-sm text-ink-soft mt-1">
                     Explore other trusted medical consultants practicing at Maruti Diagnostic Centre
@@ -360,7 +358,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                   href="/doctors"
                   className="text-xs sm:text-sm font-semibold text-red hover:text-red-deep hover:underline shrink-0"
                 >
-                  View all 16 doctors
+                  View all {DOCTORS.length} doctors
                 </Link>
               </div>
 

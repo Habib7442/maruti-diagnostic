@@ -13,11 +13,11 @@ import {
   HeartPulse,
   Award,
   Phone,
-  ArrowRight,
   Sparkles,
 } from "lucide-react";
 import { JsonLd } from "@/components/json-ld";
 import { CENTRE_INFO } from "@/data/centre";
+import { DAILY_DOCTOR_COUNT, DOCTORS } from "@/data/doctors";
 import { breadcrumbSchema, webPageSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
 
@@ -33,24 +33,24 @@ export const metadata: Metadata = buildMetadata({
 export default function AboutPage() {
   const stats = [
     {
-      value: "16+",
-      label: "Consulting Specialists",
-      detail: "Across 9 medical disciplines",
+      value: String(DOCTORS.length),
+      label: "Specialist doctors",
+      detail: "Across 9 departments",
     },
     {
-      value: "8+",
-      label: "Years of Trust",
-      detail: "Serving families across Cachar",
+      value: String(DAILY_DOCTOR_COUNT),
+      label: "Daily chambers",
+      detail: "Others by appointment",
     },
     {
-      value: "4",
-      label: "Diagnostic Modalities",
-      detail: "Pathology, USG, X-Ray, ECG",
+      value: "5",
+      label: "Diagnostic services",
+      detail: "Pathology, USG, X-ray, ECG, endoscopy",
     },
     {
-      value: "7:30 AM",
-      label: "Early Sample Collection",
-      detail: "Convenient morning fasting tests",
+      value: "Opp. SMCH",
+      label: "Easy to reach",
+      detail: "SMC Point, Ghungoor",
     },
   ];
 
@@ -190,7 +190,7 @@ export default function AboutPage() {
               <div className="lg:col-span-7 space-y-5">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-paper border border-line text-xs font-medium text-ink-soft">
                   <Stethoscope className="w-3.5 h-3.5 text-red" />
-                  <span>Our Mission & Origin</span>
+                  <span>About the centre</span>
                 </div>
 
                 <h2 className="font-display font-medium text-2xl sm:text-3xl lg:text-4xl text-ink leading-tight">
@@ -199,13 +199,13 @@ export default function AboutPage() {
 
                 <div className="space-y-4 text-ink/90 text-sm sm:text-base leading-relaxed">
                   <p>
-                    For years, patients travelling to Ghungoor for medical care had to shuttle back and forth between separate consultation rooms and distant testing laboratories. A morning blood test often meant waiting days for a printed readout, delaying essential treatment decisions.
+                    <strong className="text-ink font-semibold">Maruti Diagnostic Centre</strong> brings doctors&apos; chambers and diagnostic tests into one building. {DOCTORS.length} specialist doctors across 9 departments consult here, {DAILY_DOCTOR_COUNT} of them in a daily chamber, alongside pathology, ultrasound, digital X-ray, ECG and upper GI endoscopy.
                   </p>
                   <p>
-                    <strong className="text-ink font-semibold">Maruti Diagnostic Centre</strong> was founded to solve this challenge. By housing <strong className="text-ink font-semibold">16 consulting medical specialists</strong> across 9 departments under one roof alongside automated pathology, high-resolution sonography, and digital radiography, we provide patients with an integrated, reassuring experience.
+                    That means a patient can see a doctor, give a sample or have a scan, and come back with the report without travelling between separate clinics and laboratories.
                   </p>
                   <p>
-                    Whether you need an early morning fasting blood sugar check before work, an urgent digital chest X-ray, or an afternoon consultation with an experienced neurosurgeon, gynaecologist, or physician, our facility ensures compassionate, streamlined care right opposite SMCH.
+                    Whether you need a morning fasting blood sugar check, an urgent digital chest X-ray, or an afternoon consultation with an experienced neurosurgeon, gynaecologist, or physician, our facility ensures compassionate, streamlined care right opposite SMCH.
                   </p>
                 </div>
               </div>
@@ -214,7 +214,7 @@ export default function AboutPage() {
               <div className="lg:col-span-5 bg-paper rounded-2xl p-6 sm:p-7 border border-line space-y-4">
                 <div className="flex items-center gap-2 text-ink font-semibold text-sm pb-3 border-b border-line">
                   <MapPin className="w-4 h-4 text-red shrink-0" />
-                  <span>Strategic Landmark Location</span>
+                  <span>Where we are</span>
                 </div>
 
                 <div className="space-y-3 text-xs sm:text-sm text-ink-soft">
@@ -232,10 +232,9 @@ export default function AboutPage() {
                 <div className="pt-2">
                   <Link
                     href="/contact"
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue hover:underline"
+                    className="inline-flex items-center min-h-12 text-sm font-semibold text-blue hover:underline"
                   >
-                    <span>View interactive map & directions</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    See the map and directions
                   </Link>
                 </div>
               </div>
@@ -247,7 +246,7 @@ export default function AboutPage() {
             <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
               <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-line text-xs font-medium text-ink-soft mb-3">
                 <ShieldCheck className="w-3.5 h-3.5 text-blue" />
-                <span>Quality & Compliance</span>
+                <span>Quality</span>
               </div>
 
               <h2 className="font-display font-medium text-3xl sm:text-4xl text-ink leading-tight tracking-tight mb-3">
@@ -265,7 +264,7 @@ export default function AboutPage() {
                 return (
                   <div
                     key={index}
-                    className="bg-surface border border-line rounded-2xl p-6 sm:p-8 hover:border-ink/20 transition-all hover:shadow-xs"
+                    className="bg-surface border border-line rounded-2xl p-6 sm:p-8 hover:border-ink/20 transition-colors"
                   >
                     <div className="w-12 h-12 rounded-xl bg-paper border border-line flex items-center justify-center text-red mb-5">
                       <Icon className="w-6 h-6" />
@@ -331,11 +330,11 @@ export default function AboutPage() {
           {/* Doctor Chamber Hub Callout Band */}
           <section className="bg-surface border border-line rounded-2xl sm:rounded-3xl p-8 sm:p-12 mb-16 shadow-xs flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="max-w-2xl text-center lg:text-left">
-              <span className="text-xs font-semibold uppercase tracking-wider text-red block mb-2">
-                16 Consulting Medical Specialists
-              </span>
+              <p className="text-sm font-semibold text-red-deep mb-2">
+                {DOCTORS.length} specialist doctors
+              </p>
               <h2 className="font-display font-medium text-2xl sm:text-3xl text-ink leading-tight mb-3">
-                Daily OPD chambers with Silchar&apos;s experienced doctors
+                Chambers for doctors from across Silchar
               </h2>
               <p className="text-sm text-ink-soft leading-relaxed">
                 Consult with specialists across Neurosurgery, General Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, Dermatology, Laparoscopic Surgery, and Psychiatry. View individual chamber timings, fees, and consultation schedules.
@@ -347,14 +346,14 @@ export default function AboutPage() {
                 href="/doctors"
                 className="px-6 py-3.5 rounded-full bg-ink hover:bg-ink/90 text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs"
               >
-                Browse All Doctors
+                Browse all doctors
               </Link>
 
               <Link
                 href="/booking"
                 className="px-6 py-3.5 rounded-full bg-red hover:bg-red-deep text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs"
               >
-                Book Consultation
+                Book a consultation
               </Link>
             </div>
           </section>
@@ -381,7 +380,7 @@ export default function AboutPage() {
 
               <a
                 href={`https://wa.me/91${CENTRE_INFO.whatsapp.number}?text=${encodeURIComponent(
-                  "Hello Maruti Diagnostic Centre, I would like to enquire about doctor chamber schedules and test rates."
+                  "Hello Maruti Diagnostic Centre, I would like to enquire about doctor chamber schedules and tests."
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -394,7 +393,7 @@ export default function AboutPage() {
                   height={18}
                   className="w-4 h-4 object-contain"
                 />
-                <span>WhatsApp Query</span>
+                <span>Ask on WhatsApp</span>
               </a>
             </div>
           </div>

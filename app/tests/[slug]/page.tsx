@@ -6,12 +6,9 @@ import {
   Clock,
   MapPin,
   ChevronRight,
-  ShieldCheck,
   AlertCircle,
   Phone,
   FileCheck2,
-  Calendar,
-  IndianRupee,
   HelpCircle,
   FlaskConical,
   Stethoscope,
@@ -22,6 +19,7 @@ import {
   getRelatedTests,
 } from "@/data/tests";
 import { CENTRE_INFO } from "@/data/centre";
+import { DAILY_DOCTOR_COUNT, DOCTORS } from "@/data/doctors";
 import { getTestFaqs } from "@/data/faqs";
 import { FaqSection } from "@/components/faq-section";
 import { JsonLd } from "@/components/json-ld";
@@ -35,7 +33,7 @@ interface TestPageProps {
   }>;
 }
 
-// Statically prerender all 14 test pages at build time
+// Statically prerender every test page at build time
 export async function generateStaticParams() {
   const slugs = getAllTestSlugs();
   return slugs.map((slug) => ({
@@ -117,8 +115,8 @@ export default async function TestDetailPage({ params }: TestPageProps) {
           <section className="bg-surface border border-line rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-10 mb-8 shadow-xs">
             <div className="max-w-4xl">
               <div className="flex flex-wrap items-center gap-2 mb-3">
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red/10 text-red border border-red/20">
-                  {test.category} Investigation
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-red/10 text-red-deep border border-red/20">
+                  {test.category}
                 </span>
 
                 {test.sampleType && (
@@ -127,10 +125,6 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                   </span>
                 )}
 
-                <span className="text-xs font-medium px-3 py-1 rounded-full bg-paper border border-line text-ink-soft flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue" />
-                  <span>Quality Controlled Analysis</span>
-                </span>
               </div>
 
               {/* H1 for Search Engine Ranking */}
@@ -139,7 +133,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
               </h1>
 
               <p className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed mb-6">
-                {test.shortDescription} Available daily at Maruti Diagnostic Centre opposite SMCH, Ghungoor.
+                {test.shortDescription} Available at Maruti Diagnostic Centre, SMC Point, Ghungoor, opposite SMCH, Silchar.
               </p>
 
               {/* Fast Reassurance Bar */}
@@ -168,7 +162,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                 <div className="flex items-center gap-2 mb-3 pb-3 border-b border-line">
                   <AlertCircle className="w-5 h-5 text-red shrink-0" />
                   <h2 className="font-display font-medium text-xl sm:text-2xl text-ink">
-                    Patient Preparation Instructions
+                    How to prepare
                   </h2>
                 </div>
 
@@ -180,7 +174,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
 
                 <div className="text-xs sm:text-sm text-ink-soft space-y-2">
                   <p>
-                    • <strong className="text-ink font-medium">Early Morning Sample Desk:</strong> Our phlebotomy and blood collection counter opens at <strong className="text-ink">7:30 AM (Monday to Saturday)</strong> so you can give fasting samples comfortably before starting your workday.
+                    • <strong className="text-ink font-medium">Fasting samples:</strong> Sample collection starts at 8:00 AM, Monday to Saturday. The centre is closed on Sunday.
                   </p>
                   <p>
                     • <strong className="text-ink font-medium">Water Intake:</strong> For fasting blood tests, drinking plain water is generally permitted unless your doctor has specifically advised otherwise.
@@ -200,12 +194,9 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                   </h2>
                 </div>
 
-                <div className="prose prose-slate max-w-none text-ink/90 text-base sm:text-[17px] leading-relaxed space-y-4">
+                <div className="text-ink/90 text-base sm:text-[17px] leading-relaxed space-y-4">
                   <p>{test.clinicalImportance}</p>
 
-                  <p>
-                    At Maruti Diagnostic Centre, we utilize calibrated automated analyzers and quality-tested reagents to ensure your results accurately reflect your health status, assisting your consulting physician in making informed therapeutic decisions.
-                  </p>
                 </div>
               </section>
 
@@ -214,7 +205,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-line">
                   <FileCheck2 className="w-5 h-5 text-blue shrink-0" />
                   <h2 className="font-display font-medium text-xl sm:text-2xl text-ink">
-                    How Testing Works at Our Centre
+                    How testing works
                   </h2>
                 </div>
 
@@ -225,7 +216,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     </span>
                     <div>
                       <strong className="text-ink font-medium block">
-                        Walk-In or WhatsApp Booking
+                        Walk in or book on WhatsApp
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
                         Walk in directly to our counter at SMC Point, Ghungoor (opp. SMCH), or message us on WhatsApp in advance to check preparation requirements and avoid counter wait times.
@@ -239,7 +230,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     </span>
                     <div>
                       <strong className="text-ink font-medium block">
-                        Hygienic Sample Collection or Scanning
+                        Sample collection or scan
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
                         Blood samples are collected by trained phlebotomists using sterile single-use vacuum collection tubes. Imaging scans (USG and X-ray) are conducted in clean, private examination suites.
@@ -253,10 +244,10 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     </span>
                     <div>
                       <strong className="text-ink font-medium block">
-                        Report Delivery & Doctor Consultation
+                        Report and doctor consultation
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
-                        Collect your printed report at the reception counter by the designated turnaround time ({test.reportTurnaround}). If you are seeing one of our 16 daily consulting doctors, your results can be seamlessly presented during your OPD chamber visit.
+                        Collect your printed report at the reception counter by the designated turnaround time ({test.reportTurnaround}). If you are seeing one of the doctors who consult at our centre, you can show the report at the same visit.
                       </p>
                     </div>
                   </div>
@@ -268,10 +259,10 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     <Stethoscope className="w-5 h-5 text-red shrink-0" />
                     <div>
                       <span className="text-xs font-semibold text-ink block">
-                        Consult a Specialist on the Same Visit
+                        See a specialist on the same visit
                       </span>
                       <span className="text-xs text-ink-soft">
-                        16 medical practitioners consult daily in our Ghungoor chamber.
+                        {DAILY_DOCTOR_COUNT} doctors hold a daily chamber here, and {DOCTORS.length - DAILY_DOCTOR_COUNT} more see patients by appointment.
                       </span>
                     </div>
                   </div>
@@ -280,7 +271,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     href="/doctors"
                     className="inline-flex items-center justify-center text-xs font-medium bg-surface hover:bg-ink hover:text-white border border-line px-4 py-2 rounded-full text-ink transition-colors shrink-0"
                   >
-                    View Doctor Chambers
+                    View doctors
                   </Link>
                 </div>
               </section>
@@ -290,32 +281,26 @@ export default async function TestDetailPage({ params }: TestPageProps) {
             <div className="lg:col-span-4">
               <aside className="bg-surface border border-line rounded-2xl p-6 sm:p-7 shadow-xs sticky top-24">
                 <div className="flex items-center justify-between pb-4 border-b border-line">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-                    Investigation Details
+                  <span className="text-sm font-semibold text-ink">
+                    Test details
                   </span>
                   <span className="text-xs font-medium px-2.5 py-0.5 rounded-full bg-red/10 text-red border border-red/20 font-semibold">
                     {test.category}
                   </span>
                 </div>
 
-                {/* Approximate Price */}
+                {/* Call to book */}
                 <div className="py-5 border-b border-line">
-                  <span className="text-xs text-ink-soft block mb-1">Standard Rate</span>
-                  <div className="flex items-baseline gap-1.5">
-                    {test.price ? (
-                      <>
-                        <div className="flex items-center font-display font-semibold text-3xl text-ink">
-                          <IndianRupee className="w-6 h-6 text-ink/70" />
-                          <span>{test.price}</span>
-                        </div>
-                        <span className="text-xs text-ink-soft">approx.</span>
-                      </>
-                    ) : (
-                      <span className="font-display font-medium text-xl text-ink">
-                        Enquire at desk
-                      </span>
-                    )}
-                  </div>
+                  <a
+                    href={`tel:${CENTRE_INFO.phones.primary}`}
+                    className="w-full flex items-center justify-center gap-2 min-h-12 px-5 rounded-full bg-red hover:bg-red-deep text-white font-semibold text-sm transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span>Call to book test</span>
+                  </a>
+                  <p className="text-xs text-ink-soft text-center mt-2">
+                    {CENTRE_INFO.phones.displayPrimary} · {CENTRE_INFO.hoursDetail.weekday}
+                  </p>
                 </div>
 
                 {/* Key Spec Strip */}
@@ -323,7 +308,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                   <div className="flex items-start gap-2.5">
                     <Clock className="w-4 h-4 text-red shrink-0 mt-0.5" />
                     <div>
-                      <span className="text-xs text-ink-soft block">Report Turnaround</span>
+                      <span className="text-xs text-ink-soft block">Report time</span>
                       <span className="font-semibold text-ink text-xs sm:text-sm">
                         {test.reportTurnaround}
                       </span>
@@ -334,7 +319,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     <div className="flex items-start gap-2.5">
                       <FlaskConical className="w-4 h-4 text-red shrink-0 mt-0.5" />
                       <div>
-                        <span className="text-xs text-ink-soft block">Sample / Modality</span>
+                        <span className="text-xs text-ink-soft block">Sample or scan type</span>
                         <span className="font-medium text-ink text-xs sm:text-sm">
                           {test.sampleType}
                         </span>
@@ -347,7 +332,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                     <div>
                       <span className="text-xs text-ink-soft block">Location</span>
                       <span className="text-xs text-ink leading-relaxed">
-                        Maruti Diagnostic Centre, SMC Point, Ghungoor (Opp. SMCH), Silchar
+                        {CENTRE_INFO.name}, {CENTRE_INFO.formattedAddress}
                       </span>
                     </div>
                   </div>
@@ -368,38 +353,28 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                       height={20}
                       className="w-5 h-5 object-contain"
                     />
-                    <span>Book via WhatsApp</span>
+                    <span>Book on WhatsApp</span>
                   </a>
 
                   <a
-                    href={`tel:${CENTRE_INFO.phones.primary}`}
-                    className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-full bg-paper hover:bg-clay/30 border border-line text-ink font-medium text-xs transition-colors"
+                    href={`tel:${CENTRE_INFO.phones.secondary}`}
+                    className="w-full flex items-center justify-center gap-2 min-h-12 px-5 rounded-full bg-paper hover:bg-clay/30 border border-line text-ink font-medium text-sm transition-colors"
                   >
                     <Phone className="w-3.5 h-3.5 text-red" />
-                    <span>Call Lab Desk: {CENTRE_INFO.phones.displayPrimary}</span>
+                    <span>Alternate number: {CENTRE_INFO.phones.displaySecondary}</span>
                   </a>
 
                   <div className="text-center pt-2">
                     <Link
-                      href={`/booking?test=${encodeURIComponent(test.name)}`}
-                      className="text-xs text-blue hover:underline inline-flex items-center gap-1"
+                      href={`/booking?test=${test.slug}`}
+                      className="text-xs text-blue hover:underline inline-flex items-center gap-1 min-h-12"
                     >
                       <HelpCircle className="w-3.5 h-3.5" />
-                      <span>Prefer booking form? Schedule test online</span>
+                      <span>Prefer a form? Send a booking request</span>
                     </Link>
                   </div>
                 </div>
 
-                {/* Morning Fasting Tip */}
-                <div className="mt-5 p-3.5 bg-paper rounded-xl border border-line text-xs text-ink-soft space-y-1">
-                  <div className="flex items-center gap-1.5 text-ink font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-blue shrink-0" />
-                    <span>Early morning desk</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    Fasting phlebotomy begins at 7:30 AM daily. Prior booking is appreciated but walk-ins are always welcomed.
-                  </p>
-                </div>
               </aside>
             </div>
           </div>
@@ -414,10 +389,10 @@ export default async function TestDetailPage({ params }: TestPageProps) {
               <div className="flex items-baseline justify-between mb-6">
                 <div>
                   <h2 className="font-display font-medium text-2xl sm:text-3xl text-ink">
-                    Other {test.category} Investigations
+                    Other {test.category.toLowerCase()} tests
                   </h2>
                   <p className="text-xs sm:text-sm text-ink-soft mt-1">
-                    Explore other routine and specialized tests available at Maruti Diagnostic Centre
+                    More tests available at Maruti Diagnostic Centre
                   </p>
                 </div>
 

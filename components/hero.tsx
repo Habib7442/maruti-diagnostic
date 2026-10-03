@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Phone, Calendar, Star, CheckCircle2, MapPin, Stethoscope, ArrowUpRight } from "lucide-react";
+import { Phone, Calendar, CheckCircle2, MapPin, Stethoscope } from "lucide-react";
 import { CENTRE_INFO } from "@/data/centre";
+import { DAILY_DOCTOR_COUNT, DOCTORS } from "@/data/doctors";
 
 export function Hero() {
   const serviceChips = [
@@ -10,7 +11,7 @@ export function Hero() {
     { name: "USG (Ultrasound)", href: "/tests" },
     { name: "ECG & Cardiac", href: "/tests" },
     { name: "Endoscopy", href: "/tests" },
-    { name: "16 Specialists", href: "/doctors" },
+    { name: `${DOCTORS.length} doctors`, href: "/doctors" },
   ];
 
   return (
@@ -32,13 +33,13 @@ export function Hero() {
 
             {/* Reassurance copy */}
             <p className="font-sans text-lg sm:text-xl text-ink-soft leading-relaxed max-w-xl mb-8">
-              Daily chamber for 16 medical specialists and high-precision pathology, digital X-ray, ultrasound, ECG, and endoscopy serving Silchar and southern Assam.
+              {DOCTORS.length} doctors consult here, {DAILY_DOCTOR_COUNT} of them in a daily chamber, alongside pathology, digital X-ray, ultrasound, ECG and endoscopy for Silchar and the Barak Valley.
             </p>
 
             {/* Dual CTAs (Call hidden on mobile where bottom sticky bar is active) */}
             <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto mb-10">
               <Link
-                href="/contact"
+                href="/booking?type=test"
                 className="inline-flex items-center justify-center gap-2.5 bg-red hover:bg-red-deep text-white font-medium text-base px-7 py-3.5 rounded-full transition-all shadow-xs active:scale-[0.98] min-h-[48px] w-full sm:w-auto text-center"
               >
                 <Calendar className="w-5 h-5 stroke-[2]" />
@@ -47,7 +48,7 @@ export function Hero() {
 
               <a
                 href={`tel:${CENTRE_INFO.phones.primary}`}
-                className="hidden sm:inline-flex items-center justify-center gap-2.5 border-1.5 border-ink hover:border-red hover:text-red text-ink font-medium text-base px-6 py-3.5 rounded-full transition-all hover:bg-clay/30 min-h-[48px] w-full sm:w-auto text-center"
+                className="hidden sm:inline-flex items-center justify-center gap-2.5 border-2 border-ink hover:border-red hover:text-red text-ink font-medium text-base px-6 py-3.5 rounded-full transition-all hover:bg-clay/30 min-h-[48px] w-full sm:w-auto text-center"
               >
                 <Phone className="w-5 h-5 text-red stroke-[2]" />
                 <span>Call {CENTRE_INFO.phones.displayPrimary}</span>
@@ -56,11 +57,6 @@ export function Hero() {
 
             {/* Trust Proof Bar */}
             <div className="pt-6 border-t border-line/80 w-full flex flex-wrap items-center gap-y-3 gap-x-6 text-sm text-ink-soft">
-              <div className="flex items-center gap-1.5 text-ink">
-                <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
-                <span className="font-semibold text-ink">5.0 on Google</span>
-              </div>
-
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-blue stroke-[2]" />
                 <span>Same-day reports</span>
@@ -68,7 +64,7 @@ export function Hero() {
 
               <div className="flex items-center gap-1.5">
                 <Stethoscope className="w-4 h-4 text-blue stroke-[2]" />
-                <span>16 Chamber Specialists</span>
+                <Link href="/doctors" className="hover:underline">{DOCTORS.length} specialist doctors</Link>
               </div>
             </div>
           </div>
@@ -81,7 +77,7 @@ export function Hero() {
                 <div className="relative aspect-4/3 w-full rounded-xl overflow-hidden bg-clay/40">
                   <Image
                     src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=1200&auto=format&fit=crop"
-                    alt="Consultation and patient care at Maruti Diagnostic Centre Silchar"
+                    alt="A doctor consulting a patient"
                     fill
                     sizes="(max-width: 768px) 100vw, 500px"
                     className="object-cover object-center"
@@ -105,14 +101,13 @@ export function Hero() {
                 <div className="pt-3 pb-1 px-1">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-medium text-ink-soft">
-                      Available Services & Chambers
+                      Services and chambers
                     </span>
                     <Link
                       href="/tests"
-                      className="text-xs font-semibold text-blue hover:underline inline-flex items-center gap-0.5"
+                      className="text-xs font-semibold text-blue hover:underline inline-flex items-center min-h-12 px-1"
                     >
-                      <span>View all</span>
-                      <ArrowUpRight className="w-3 h-3" />
+                      View all
                     </Link>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -120,7 +115,7 @@ export function Hero() {
                       <Link
                         key={chip.name}
                         href={chip.href}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-paper hover:bg-red hover:text-white border border-line text-ink transition-colors"
+                        className="inline-flex items-center min-h-10 px-3.5 rounded-full text-sm font-medium bg-paper hover:bg-red hover:text-white border border-line text-ink transition-colors"
                       >
                         {chip.name}
                       </Link>
@@ -139,16 +134,15 @@ export function Hero() {
                     SMC Point, Ghungoor, Silchar
                   </div>
                   <div className="text-ink-soft leading-relaxed">
-                    Opposite SMCH Main Gate, Behind Maruti Medical
+                    Opposite SMCH main gate, behind Maruti Medical
                   </div>
                   <a
                     href={CENTRE_INFO.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 inline-flex items-center gap-1 font-semibold text-blue hover:underline"
+                    className="inline-flex items-center min-h-10 font-semibold text-blue hover:underline"
                   >
-                    <span>View on Google Maps</span>
-                    <ArrowUpRight className="w-3 h-3" />
+                    View on Google Maps
                   </a>
                 </div>
               </div>

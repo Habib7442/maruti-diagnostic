@@ -1,5 +1,5 @@
 import { CENTRE_INFO } from "@/data/centre";
-import { DOCTORS, hasVerifiedRegistration } from "@/data/doctors";
+import { DOCTORS } from "@/data/doctors";
 import type { Doctor } from "@/data/doctors";
 import { TESTS } from "@/data/tests";
 import type { MedicalTest, TestCategory } from "@/data/tests";
@@ -82,27 +82,6 @@ const CATEGORY_SPECIALTY: Record<TestCategory, string> = {
   Cardiac: "Cardiovascular",
   Endoscopy: "Gastroenterologic",
 };
-
-// --- Chamber timing ---
-
-function to24h(h: string, m: string, meridiem: string): string {
-  let hour = parseInt(h, 10) % 12;
-  if (/pm/i.test(meridiem)) hour += 12;
-  return `${String(hour).padStart(2, "0")}:${m}`;
-}
-
-export function parseChamberTiming(
-  timing: string
-): { opens: string; closes: string } | null {
-  const match = timing.match(
-    /(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i
-  );
-  if (!match) return null;
-  return {
-    opens: to24h(match[1], match[2], match[3]),
-    closes: to24h(match[4], match[5], match[6]),
-  };
-}
 
 // --- Entity graph (site-wide) ---
 
@@ -282,7 +261,6 @@ export function faqSchema(faqs: Faq[]): JsonLdNode {
 
 export function physicianSchema(doctor: Doctor): JsonLdNode {
   const url = absoluteUrl(`/doctors/${doctor.slug}`);
-  const timing = parseChamberTiming(doctor.chamberTiming);
 
   return {
     "@type": "Physician",
@@ -298,28 +276,12 @@ export function physicianSchema(doctor: Doctor): JsonLdNode {
       "@type": "EducationalOccupationalCredential",
       name: q,
     })),
-    ...(hasVerifiedRegistration(doctor)
-      ? {
-          identifier: {
-            "@type": "PropertyValue",
-            name: "Medical registration number",
-            value: doctor.registrationNo,
-          },
-        }
-      : {}),
     memberOf: clinicRef(),
     worksFor: clinicRef(),
     address: postalAddress(),
     telephone: toE164(CENTRE_INFO.phones.primary),
     areaServed,
     ...(doctor.fee ? { priceRange: `₹${doctor.fee}` } : {}),
-    ...(timing && doctor.availableDays?.length
-      ? {
-          openingHoursSpecification: [
-            hoursSpec(doctor.availableDays, timing.opens, timing.closes),
-          ],
-        }
-      : {}),
   };
 }
 
@@ -354,16 +316,6 @@ export function medicalTestSchema(test: MedicalTest): JsonLdNode[] {
       url,
       provider: clinicRef(),
       areaServed,
-      ...(test.price
-        ? {
-            offers: {
-              "@type": "Offer",
-              price: test.price,
-              priceCurrency: "INR",
-              url,
-            },
-          }
-        : {}),
     },
   ];
 }

@@ -64,7 +64,8 @@ export const CENTRE_INFO: CentreInfo = {
     postalCode: "788014",
     addressCountry: "IN",
   },
-  formattedAddress: "SMC Point, Ghungoor, Opp. SMCH, Behind Maruti Medical, Silchar, Cachar, Assam 788014",
+  /** The one display address. Use it everywhere so NAP stays byte-for-byte identical. */
+  formattedAddress: "SMC Point, Ghungoor, Opp. SMCH, Behind Maruti Medical, Silchar, Assam 788014",
   geo: {
     latitude: 24.7892,
     longitude: 92.7938,
@@ -80,23 +81,22 @@ export const CENTRE_INFO: CentreInfo = {
     display: "+91 99578 32872",
     chatUrl: "https://wa.me/919957832872?text=Hello%20Maruti%20Diagnostic%20Centre,%20I%20would%20like%20to%20enquire%20about%20a%20test%20or%20doctor%20appointment.",
   },
-  hours: "Mon - Sat: 07:30 AM - 08:30 PM, Sun: 08:00 AM - 02:00 PM",
+  hours: "Mon - Sat: 08:00 AM - 08:30 PM, Sun: Closed",
   hoursDetail: {
-    weekday: "Monday - Saturday: 7:30 AM - 8:30 PM",
-    sunday: "Sunday: 8:00 AM - 2:00 PM",
+    weekday: "Monday - Saturday: 8:00 AM - 8:30 PM",
+    sunday: "Sunday: Closed",
   },
   openingHours: [
     {
       days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-      opens: "07:30",
+      opens: "08:00",
       closes: "20:30",
     },
-    { days: ["Sunday"], opens: "08:00", closes: "14:00" },
   ],
   googleMapsUrl: "https://maps.google.com/?q=Maruti+Diagnostic+Centre+Silchar",
   sameAs: [],
   verified: {
-    hours: false,
+    hours: true,
     geo: false,
     whatsapp: false,
     aggregateRating: false,

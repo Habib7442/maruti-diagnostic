@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
@@ -12,13 +12,32 @@ import {
   Stethoscope,
   FlaskConical,
   HelpCircle,
-  ArrowRight,
 } from "lucide-react";
 import { DOCTORS } from "@/data/doctors";
 import { TESTS } from "@/data/tests";
 import { CENTRE_INFO } from "@/data/centre";
 
 type EnquiryType = "doctor" | "test" | "general";
+
+/** Matches `?doctor=` / `?test=` by slug, falling back to an exact name for older links. */
+function findDoctorId(param: string | null): string | undefined {
+  if (!param) return undefined;
+  const value = param.toLowerCase();
+  return DOCTORS.find((d) => d.slug === value || d.name.toLowerCase() === value)?.id;
+}
+
+function findTestId(param: string | null): string | undefined {
+  if (!param) return undefined;
+  const value = param.toLowerCase();
+  return TESTS.find((t) => t.slug === value || t.name.toLowerCase() === value)?.id;
+}
+
+/** Today's date in the visitor's own timezone, as YYYY-MM-DD for the date input's min. */
+function localToday(): string {
+  const now = new Date();
+  const offset = now.getTimezoneOffset() * 60_000;
+  return new Date(now.getTime() - offset).toISOString().split("T")[0];
+}
 
 interface BookingFormProps {
   initialType?: EnquiryType;
@@ -44,29 +63,13 @@ export function BookingForm({
     return initialType;
   });
 
-  const [selectedDoctorId, setSelectedDoctorId] = useState<string>(() => {
-    if (paramDoctor) {
-      const match = DOCTORS.find(
-        (d) =>
-          d.name.toLowerCase().includes(paramDoctor.toLowerCase()) ||
-          d.slug === paramDoctor
-      );
-      return match ? match.id : DOCTORS[0].id;
-    }
-    return DOCTORS[0].id;
-  });
+  const [selectedDoctorId, setSelectedDoctorId] = useState<string>(
+    () => findDoctorId(paramDoctor) ?? DOCTORS[0].id
+  );
 
-  const [selectedTestId, setSelectedTestId] = useState<string>(() => {
-    if (paramTest) {
-      const match = TESTS.find(
-        (t) =>
-          t.name.toLowerCase().includes(paramTest.toLowerCase()) ||
-          t.slug === paramTest
-      );
-      return match ? match.id : TESTS[0].id;
-    }
-    return TESTS[0].id;
-  });
+  const [selectedTestId, setSelectedTestId] = useState<string>(
+    () => findTestId(paramTest) ?? TESTS[0].id
+  );
 
   const [patientName, setPatientName] = useState("");
   const [phone, setPhone] = useState("");
@@ -82,30 +85,9 @@ export function BookingForm({
     whatsappUrl: string;
   } | null>(null);
 
-  // Sync state if query params change
-  useEffect(() => {
-    if (paramDoctor) {
-      setType("doctor");
-      const match = DOCTORS.find(
-        (d) =>
-          d.name.toLowerCase().includes(paramDoctor.toLowerCase()) ||
-          d.slug === paramDoctor
-      );
-      if (match) setSelectedDoctorId(match.id);
-    } else if (paramTest) {
-      setType("test");
-      const match = TESTS.find(
-        (t) =>
-          t.name.toLowerCase().includes(paramTest.toLowerCase()) ||
-          t.slug === paramTest
-      );
-      if (match) setSelectedTestId(match.id);
-    }
-  }, [paramDoctor, paramTest]);
-
   const selectedDoctor = DOCTORS.find((d) => d.id === selectedDoctorId);
   const selectedTest = TESTS.find((t) => t.id === selectedTestId);
-  const todayString = new Date().toISOString().split("T")[0];
+  const todayString = localToday();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,7 +101,7 @@ export function BookingForm({
     const cleanPhone = phone.trim().replace(/\D/g, "");
     if (!/^[6-9]\d{9}$/.test(cleanPhone)) {
       setErrorMessage(
-        "Please enter a valid 10-digit Indian mobile number (e.g. 9957832872)."
+        "Please enter a valid 10-digit Indian mobile number."
       );
       return;
     }
@@ -197,7 +179,7 @@ export function BookingForm({
 
           <div className="max-w-md mx-auto space-y-2">
             <h3 className="font-display font-medium text-2xl text-ink">
-              Opening WhatsApp Enquiry
+              Opening WhatsApp
             </h3>
             <p className="text-sm text-ink-soft leading-relaxed">
               Your appointment request was prepared for our official WhatsApp number{" "}
@@ -245,7 +227,7 @@ export function BookingForm({
                 height={22}
                 className="w-5 h-5 object-contain shrink-0"
               />
-              <span>Tap to Open WhatsApp Chat</span>
+              <span>Open WhatsApp chat</span>
             </a>
 
             <a
@@ -253,13 +235,13 @@ export function BookingForm({
               className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-paper hover:bg-clay/30 border border-line text-ink font-medium text-xs transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-red" />
-              <span>Call Reception Directly: {CENTRE_INFO.phones.displayPrimary}</span>
+              <span>Call reception: {CENTRE_INFO.phones.displayPrimary}</span>
             </a>
 
             <button
               type="button"
               onClick={resetForm}
-              className="text-xs text-ink-soft hover:text-red transition-colors block mx-auto pt-2 cursor-pointer"
+              className="text-sm text-ink-soft hover:text-red-deep transition-colors block mx-auto min-h-12 px-4 cursor-pointer"
             >
               Book another doctor or test
             </button>
@@ -269,70 +251,73 @@ export function BookingForm({
         /* Form View */
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Mode Selector Tabs */}
-          <div>
-            <label className="text-xs font-semibold text-ink-soft uppercase tracking-wider block mb-2.5">
-              Select Appointment Category
-            </label>
+          <fieldset>
+            <legend className="text-sm font-semibold text-ink block mb-2.5">
+              What do you want to book?
+            </legend>
             <div className="grid grid-cols-3 gap-2 bg-paper p-1.5 rounded-2xl border border-line">
               <button
                 type="button"
+                aria-pressed={type === "doctor"}
                 onClick={() => setType("doctor")}
-                className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-1.5 min-h-12 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   type === "doctor"
                     ? "bg-red text-white shadow-xs"
                     : "text-ink hover:text-red hover:bg-surface"
                 }`}
               >
                 <Stethoscope className="w-4 h-4 shrink-0" />
-                <span className="truncate">Doctor Visit</span>
+                <span className="truncate">Doctor visit</span>
               </button>
 
               <button
                 type="button"
+                aria-pressed={type === "test"}
                 onClick={() => setType("test")}
-                className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-1.5 min-h-12 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   type === "test"
                     ? "bg-red text-white shadow-xs"
                     : "text-ink hover:text-red hover:bg-surface"
                 }`}
               >
                 <FlaskConical className="w-4 h-4 shrink-0" />
-                <span className="truncate">Diagnostic Test</span>
+                <span className="truncate">Test or scan</span>
               </button>
 
               <button
                 type="button"
+                aria-pressed={type === "general"}
                 onClick={() => setType("general")}
-                className={`flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
+                className={`flex items-center justify-center gap-1.5 min-h-12 px-3 rounded-xl text-xs sm:text-sm font-medium transition-all cursor-pointer ${
                   type === "general"
                     ? "bg-red text-white shadow-xs"
                     : "text-ink hover:text-red hover:bg-surface"
                 }`}
               >
                 <HelpCircle className="w-4 h-4 shrink-0" />
-                <span className="truncate">General Query</span>
+                <span className="truncate">General query</span>
               </button>
             </div>
-          </div>
+          </fieldset>
 
           {/* Doctor Selection */}
           {type === "doctor" && (
             <div className="space-y-2">
               <label
                 htmlFor="doctor_select"
-                className="text-xs font-semibold text-ink-soft uppercase tracking-wider block"
+                className="text-sm font-semibold text-ink block"
               >
-                Choose Consulting Doctor (16 Specialists)
+                Choose a doctor
               </label>
               <select
                 id="doctor_select"
                 value={selectedDoctorId}
                 onChange={(e) => setSelectedDoctorId(e.target.value)}
-                className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-sm text-ink focus:outline-none focus:border-red transition-colors"
+                className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-base text-ink focus:outline-none focus:border-red transition-colors"
               >
                 {DOCTORS.map((doc) => (
                   <option key={doc.id} value={doc.id}>
-                    {doc.name} — {doc.specialty} ({doc.chamberTiming})
+                    {doc.name}, {doc.specialty} ({doc.chamberTiming})
                   </option>
                 ))}
               </select>
@@ -342,7 +327,7 @@ export function BookingForm({
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-3.5 h-3.5 text-red shrink-0" />
                     <span>
-                      OPD Timings:{" "}
+                      Timing:{" "}
                       <strong className="text-ink">{selectedDoctor.chamberTiming}</strong>
                     </span>
                   </div>
@@ -361,19 +346,19 @@ export function BookingForm({
             <div className="space-y-2">
               <label
                 htmlFor="test_select"
-                className="text-xs font-semibold text-ink-soft uppercase tracking-wider block"
+                className="text-sm font-semibold text-ink block"
               >
-                Choose Test / Scan
+                Choose a test or scan
               </label>
               <select
                 id="test_select"
                 value={selectedTestId}
                 onChange={(e) => setSelectedTestId(e.target.value)}
-                className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-sm text-ink focus:outline-none focus:border-red transition-colors"
+                className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-base text-ink focus:outline-none focus:border-red transition-colors"
               >
                 {TESTS.map((t) => (
                   <option key={t.id} value={t.id}>
-                    {t.name} [{t.category}] {t.price ? `— ₹${t.price}` : ""}
+                    {t.name} [{t.category}]
                   </option>
                 ))}
               </select>
@@ -396,27 +381,28 @@ export function BookingForm({
             <div>
               <label
                 htmlFor="patient_name"
-                className="text-xs font-semibold text-ink-soft uppercase tracking-wider block mb-1.5"
+                className="text-sm font-semibold text-ink block mb-1.5"
               >
-                Patient Full Name <span className="text-red">*</span>
+                Patient name <span className="text-red-deep">*</span>
               </label>
               <input
                 id="patient_name"
                 type="text"
                 required
-                placeholder="e.g. Joydeep Das"
+                placeholder="Patient's full name"
+                autoComplete="name"
                 value={patientName}
                 onChange={(e) => setPatientName(e.target.value)}
-                className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-sm text-ink placeholder:text-ink-soft/60 focus:outline-none focus:border-red transition-colors"
+                className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-base text-ink placeholder:text-ink-soft/60 focus:outline-none focus:border-red transition-colors"
               />
             </div>
 
             <div>
               <label
                 htmlFor="patient_phone"
-                className="text-xs font-semibold text-ink-soft uppercase tracking-wider block mb-1.5"
+                className="text-sm font-semibold text-ink block mb-1.5"
               >
-                WhatsApp / Mobile Number <span className="text-red">*</span>
+                Mobile number <span className="text-red-deep">*</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-ink-soft">
@@ -427,10 +413,12 @@ export function BookingForm({
                   type="tel"
                   required
                   maxLength={10}
-                  placeholder="99578 32872"
+                  placeholder="10-digit mobile number"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                  className="w-full pl-12 pr-3.5 py-3 rounded-[10px] bg-paper border border-line text-sm text-ink placeholder:text-ink-soft/60 focus:outline-none focus:border-red transition-colors"
+                  className="w-full pl-12 pr-3.5 py-3 rounded-[10px] bg-paper border border-line text-base text-ink placeholder:text-ink-soft/60 focus:outline-none focus:border-red transition-colors"
                 />
               </div>
             </div>
@@ -440,9 +428,9 @@ export function BookingForm({
           <div>
             <label
               htmlFor="preferred_date"
-              className="text-xs font-semibold text-ink-soft uppercase tracking-wider block mb-1.5"
+              className="text-sm font-semibold text-ink block mb-1.5"
             >
-              Preferred Consultation / Test Date (Optional)
+              Preferred date (optional)
             </label>
             <div className="relative">
               <Calendar className="w-4 h-4 text-ink-soft absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -452,7 +440,7 @@ export function BookingForm({
                 min={todayString}
                 value={preferredDate}
                 onChange={(e) => setPreferredDate(e.target.value)}
-                className="w-full pl-10 pr-3.5 py-3 rounded-[10px] bg-paper border border-line text-sm text-ink focus:outline-none focus:border-red transition-colors"
+                className="w-full pl-10 pr-3.5 py-3 rounded-[10px] bg-paper border border-line text-base text-ink focus:outline-none focus:border-red transition-colors"
               />
             </div>
           </div>
@@ -461,27 +449,29 @@ export function BookingForm({
           <div>
             <label
               htmlFor="patient_message"
-              className="text-xs font-semibold text-ink-soft uppercase tracking-wider block mb-1.5"
+              className="text-sm font-semibold text-ink block mb-1.5"
             >
-              Symptoms, Reason for Visit, or Special Notes (Optional)
+              Reason for visit or notes (optional)
             </label>
             <textarea
               id="patient_message"
               rows={3}
-              placeholder="e.g. Experiencing back pain, or need morning fasting blood sample..."
+              placeholder="For example: back pain for two weeks"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-sm text-ink placeholder:text-ink-soft/60 focus:outline-none focus:border-red transition-colors resize-none"
+              className="w-full px-3.5 py-3 rounded-[10px] bg-paper border border-line text-base text-ink placeholder:text-ink-soft/60 focus:outline-none focus:border-red transition-colors resize-none"
             />
           </div>
 
           {/* Error Message banner */}
-          {errorMessage && (
-            <div className="p-3.5 rounded-xl bg-red/10 border border-red/20 text-red text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{errorMessage}</span>
-            </div>
-          )}
+          <div aria-live="assertive">
+            {errorMessage && (
+              <div role="alert" className="p-3.5 rounded-xl bg-red/10 border border-red/20 text-red-deep text-sm flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{errorMessage}</span>
+              </div>
+            )}
+          </div>
 
           {/* Direct WhatsApp Submit Button */}
           <div>
@@ -496,12 +486,12 @@ export function BookingForm({
                 height={24}
                 className="w-6 h-6 object-contain shrink-0"
               />
-              <span>Send Booking on WhatsApp (+91 {CENTRE_INFO.whatsapp.number})</span>
+              <span>Send booking on WhatsApp</span>
             </button>
 
             <div className="flex items-center justify-center gap-2 text-[11px] text-ink-soft mt-3">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#128C7E]" />
-              <span>Opens real WhatsApp directly. No payment or account required.</span>
+              <span>Opens WhatsApp with your details filled in. No payment or account needed.</span>
             </div>
           </div>
         </form>

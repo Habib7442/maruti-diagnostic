@@ -1,3 +1,4 @@
+import { DAILY_DOCTOR_COUNT, DOCTORS } from "@/data/doctors";
 import {
   Users,
   ShieldCheck,
@@ -11,39 +12,38 @@ export function FacilityHighlightsSection() {
   const highlights = [
     {
       icon: Users,
-      title: "16 Consulting Specialists",
-      description:
-        "Daily and visiting OPD chambers for experienced local specialists across Neurosurgery, Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, and Surgery.",
+      title: `${DOCTORS.length} specialist doctors`,
+      description: `${DAILY_DOCTOR_COUNT} doctors hold a daily chamber and ${DOCTORS.length - DAILY_DOCTOR_COUNT} more see patients by appointment, across Neurosurgery, Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, Dermatology, Surgery and Psychiatry.`,
     },
     {
       icon: Zap,
-      title: "Same-Day Test Reports",
+      title: "Same-day reports for routine tests",
       description:
-        "Automated hematology and biochemistry analyzers enable same-evening report turnaround for routine blood profiles, helping doctors begin treatment faster.",
+        "Routine blood tests are usually reported the same day, so your doctor can review them sooner.",
     },
     {
       icon: ShieldCheck,
-      title: "Integrated Diagnostics",
+      title: "Tests under one roof",
       description:
-        "Pathology laboratory, low-radiation digital radiography (X-ray), high-resolution sonography (USG), and ECG all under one roof.",
+        "Pathology, digital X-ray, ultrasound (USG), ECG and upper GI endoscopy in the same building as the doctors' chambers.",
     },
     {
       icon: MapPin,
-      title: "Opposite SMCH Main Gate",
+      title: "Opposite SMCH main gate",
       description:
         "Conveniently positioned at SMC Point, Ghungoor, Silchar, with easy accessibility for patients travelling from Hailakandi, Karimganj, and Cachar.",
     },
     {
       icon: Clock,
-      title: "Early 7:30 AM Fasting Sample Desk",
+      title: "Morning fasting samples",
       description:
-        "Our phlebotomy desk opens early at 7:30 AM from Monday to Saturday, allowing fasting patients to give samples comfortably before office or clinical hours.",
+        "Fasting blood samples are collected from 8:00 AM, Monday to Saturday.",
     },
     {
       icon: HeartPulse,
-      title: "Transparent Care & Fair Pricing",
+      title: "Easy booking",
       description:
-        "Clear pricing, walk-in counter token issuance, and direct WhatsApp / telephone booking assistance without hidden registration fees.",
+        "Walk in for a token at the counter, or book by phone or WhatsApp before you come.",
     },
   ];
 
@@ -54,7 +54,7 @@ export function FacilityHighlightsSection() {
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-line text-xs font-medium text-ink-soft mb-3">
             <ShieldCheck className="w-3.5 h-3.5 text-blue" />
-            <span>Why Patients Choose Maruti</span>
+            <span>Why patients choose Maruti</span>
           </div>
 
           <h2 className="font-display font-medium text-3xl sm:text-4xl text-ink leading-tight tracking-tight mb-4">
@@ -73,7 +73,7 @@ export function FacilityHighlightsSection() {
             return (
               <div
                 key={index}
-                className="bg-surface border border-line rounded-2xl p-6 sm:p-7 hover:border-ink/20 transition-all hover:shadow-xs"
+                className="bg-surface border border-line rounded-2xl p-6 sm:p-7 hover:border-ink/20 transition-colors"
               >
                 <div className="w-11 h-11 rounded-xl bg-paper border border-line flex items-center justify-center text-red mb-4">
                   <Icon className="w-5 h-5" />

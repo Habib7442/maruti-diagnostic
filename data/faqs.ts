@@ -12,15 +12,6 @@ const { phones, formattedAddress, name: CENTRE } = CENTRE_INFO;
 const WHERE = `${CENTRE} is at ${formattedAddress}. It is opposite SMCH, behind Maruti Medical.`;
 const CALL = `Call ${phones.displayPrimary} or ${phones.displaySecondary}, message us on WhatsApp, or send an enquiry from the booking page.`;
 
-function formatDays(days?: string[]): string {
-  if (!days?.length) return "";
-  const monSat = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  if (days.length === 6 && monSat.every((d) => days.includes(d))) {
-    return "Monday to Saturday";
-  }
-  return days.join(", ");
-}
-
 const hoursAnswer = `${CENTRE_INFO.hoursDetail.weekday}. ${CENTRE_INFO.hoursDetail.sunday}. Doctor chamber timings vary by specialist.`;
 
 function hoursFaq(): Faq[] {
@@ -45,7 +36,7 @@ export function getHomeFaqs(): Faq[] {
     },
     {
       question: `How many doctors consult at ${CENTRE}?`,
-      answer: `${DOCTORS.length} specialists consult here: ${daily} in daily chamber and ${visiting} as visiting consultants by appointment. Departments include Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, Dermatology, Surgery, Neurosurgery and Neuro-psychiatry.`,
+      answer: `${DOCTORS.length} specialists consult here: ${daily} in daily chamber and ${visiting} as associated doctors by appointment. Departments include Medicine, Gynaecology, ENT, Orthopaedics, Paediatrics, Dermatology, Surgery, Neurosurgery and Neuro-psychiatry.`,
     },
     {
       question: "How do I book a test or a doctor appointment?",
@@ -78,15 +69,14 @@ export function getDoctorFaqs(doctor: Doctor): Faq[] {
   const faqs: Faq[] = [];
 
   if (doctor.type === "daily") {
-    const days = formatDays(doctor.availableDays);
     faqs.push({
       question: `What are ${doctor.name}'s chamber timings in Silchar?`,
-      answer: `${doctor.name} consults ${days ? `${days}, ` : ""}${doctor.chamberTiming} at ${CENTRE}, Ghungoor. Call ${phones.displayPrimary} to confirm before you visit.`,
+      answer: `${doctor.name} has a daily chamber from ${doctor.chamberTiming} at ${CENTRE}, Ghungoor, opposite SMCH. Call ${phones.displayPrimary} to confirm the day before you visit.`,
     });
   } else {
     faqs.push({
       question: `When does ${doctor.name} see patients in Silchar?`,
-      answer: `${doctor.name} is a visiting consultant at ${CENTRE}, Ghungoor, and sees patients by appointment. Call ${phones.displayPrimary} to confirm the day and time.`,
+      answer: `${doctor.name} is an associated doctor at ${CENTRE}, Ghungoor, and sees patients by appointment. Call ${phones.displayPrimary} to book a day and time.`,
     });
   }
 
@@ -105,6 +95,11 @@ export function getDoctorFaqs(doctor: Doctor): Faq[] {
   faqs.push({
     question: `How do I book an appointment with ${doctor.name}?`,
     answer: CALL,
+  });
+
+  faqs.push({
+    question: `What are ${doctor.name}'s qualifications?`,
+    answer: `${doctor.name}, ${doctor.specialty}, holds these qualifications: ${doctor.qualifications.join(", ")}.`,
   });
 
   if (doctor.conditionsTreated.length) {
@@ -128,10 +123,8 @@ export function getTestFaqs(test: MedicalTest): Faq[] {
       answer: `${test.reportTurnaround}.`,
     },
     {
-      question: `What is the price of ${test.name} in Silchar?`,
-      answer: test.price
-        ? `${test.name} costs ₹${test.price} at ${CENTRE}. Please confirm the current rate at reception.`
-        : `Call ${phones.displayPrimary} for the current rate of ${test.name}.`,
+      question: `How do I book ${test.name} in Silchar?`,
+      answer: `Call ${phones.displayPrimary} or ${phones.displaySecondary} to book ${test.name} at ${CENTRE}. The centre is open ${CENTRE_INFO.hoursDetail.weekday.replace("Monday - Saturday: ", "Monday to Saturday, ")} and closed on Sunday.`,
     },
     {
       question: `Why is ${test.name} done?`,

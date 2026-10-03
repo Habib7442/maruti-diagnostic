@@ -9,7 +9,6 @@ export interface MedicalTest {
   clinicalImportance: string;
   preparation: string;
   reportTurnaround: string;
-  price?: number | null;
   isPopular?: boolean;
   sampleType?: string; // e.g. "Blood", "Urine", "N/A (Imaging)"
 }
@@ -25,7 +24,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Essential screening test measuring red blood cells, white blood cells, haemoglobin, and platelets.",
     preparation: "No fasting required. Routine blood sample.",
     reportTurnaround: "Same day (within 3 to 4 hours)",
-    price: 350,
     isPopular: true,
     sampleType: "Blood (EDTA)",
   },
@@ -38,7 +36,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Critical for investigating fatigue, unexplained weight fluctuation, menstrual irregularity, and metabolic sluggishness.",
     preparation: "Overnight fasting (10-12 hours) recommended. Early morning sample.",
     reportTurnaround: "Same day evening",
-    price: 550,
     isPopular: true,
     sampleType: "Blood (Serum)",
   },
@@ -51,7 +48,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Measures plasma glucose levels in fasting state and 2 hours after a standard meal.",
     preparation: "FBS: 8-10 hours overnight fasting. PPBS: Exactly 2 hours post-meal.",
     reportTurnaround: "Same day (within 2 hours)",
-    price: 150,
     isPopular: true,
     sampleType: "Blood (Fluoride)",
   },
@@ -64,7 +60,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Invaluable for diabetes diagnosis, treatment titration, and cardiovascular risk reduction.",
     preparation: "No fasting required. Can be taken at any time of day.",
     reportTurnaround: "Same day evening",
-    price: 450,
     isPopular: true,
     sampleType: "Blood (EDTA)",
   },
@@ -77,7 +72,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Screens for atherosclerotic heart disease, hypercholesterolaemia, and stroke risks.",
     preparation: "Strict overnight fasting for 10-12 hours. Plain water is permitted.",
     reportTurnaround: "Same day evening",
-    price: 600,
     isPopular: true,
     sampleType: "Blood (Serum)",
   },
@@ -90,7 +84,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Screens for hepatitis, jaundice, fatty liver, and drug-induced liver injuries.",
     preparation: "Overnight fasting (8-10 hours) recommended.",
     reportTurnaround: "Same day evening",
-    price: 750,
     isPopular: true,
     sampleType: "Blood (Serum)",
   },
@@ -103,7 +96,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Detects impaired renal filtration, kidney stones, and medication clearance problems.",
     preparation: "Overnight fasting (8 hours) advised. Avoid heavy meat intake the previous night.",
     reportTurnaround: "Same day evening",
-    price: 750,
     isPopular: true,
     sampleType: "Blood (Serum)",
   },
@@ -116,7 +108,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Investigates chronic joint pain, fatigue, osteoporosis, and recurrent infections.",
     preparation: "No special fasting required.",
     reportTurnaround: "Next day",
-    price: 1200,
     sampleType: "Blood (Serum)",
   },
   {
@@ -128,7 +119,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Explains peripheral tingling, nerve pain, memory fog, and megaloblastic anaemia.",
     preparation: "Overnight fasting (8 hours) recommended.",
     reportTurnaround: "Next day",
-    price: 900,
     sampleType: "Blood (Serum)",
   },
   {
@@ -140,7 +130,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Quick diagnostic tool for burning urination, kidney stones, and systemic metabolic issues.",
     preparation: "Clean-catch, midstream urine sample in a sterile container provided by centre.",
     reportTurnaround: "Within 2 to 3 hours",
-    price: 150,
     sampleType: "Urine",
   },
 
@@ -154,7 +143,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Accurately detects gallstones, kidney stones, fatty liver, appendicitis, and pelvic masses.",
     preparation: "Overnight or 4-6 hours fasting for upper abdomen; full urinary bladder required for pelvis.",
     reportTurnaround: "Same day (within 1 to 2 hours of scan)",
-    price: 1400,
     isPopular: true,
     sampleType: "Non-invasive Scan",
   },
@@ -167,7 +155,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Identifies pneumonia, pulmonary tuberculosis, chest congestion, and cardiomegaly.",
     preparation: "Remove metallic objects, necklaces, and metal-pinned clothing before scanning.",
     reportTurnaround: "Same day (within 30 to 45 minutes)",
-    price: 400,
     isPopular: true,
     sampleType: "Digital Radiography",
   },
@@ -182,7 +169,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "First-line investigation for chest pain, palpitations, shortness of breath, and arrhythmias.",
     preparation: "No fasting required. Avoid strenuous exercise immediately prior to the test.",
     reportTurnaround: "Immediate (within 15 minutes with physician interpretation)",
-    price: 250,
     isPopular: true,
     sampleType: "Non-invasive Cardiac Lead",
   },
@@ -197,7 +183,6 @@ export const TESTS: MedicalTest[] = [
     clinicalImportance: "Diagnoses peptic ulcers, acid reflux (GERD), gastritis, H. pylori, and unexplained upper abdominal pain.",
     preparation: "Strict 8-hour overnight fasting. No liquids or food on the morning of procedure.",
     reportTurnaround: "Same day (detailed photographic report post-procedure)",
-    price: 2500,
     sampleType: "Endoscopic Visualisation",
   },
 ];

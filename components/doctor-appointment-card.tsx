@@ -16,9 +16,7 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
   return (
     <aside className="bg-surface border border-line rounded-2xl p-6 sm:p-7 shadow-xs sticky top-24">
       <div className="flex items-center justify-between pb-4 border-b border-line">
-        <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">
-          Chamber Details
-        </span>
+        <span className="text-sm font-semibold text-ink">Chamber details</span>
         <span
           className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
             doctor.type === "daily"
@@ -26,13 +24,13 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
               : "bg-paper text-ink-soft border border-line"
           }`}
         >
-          {doctor.type === "daily" ? "Daily OPD Chamber" : "Visiting Specialist"}
+          {doctor.type === "daily" ? "Daily chamber" : "By appointment"}
         </span>
       </div>
 
       {/* Consultation Fee */}
       <div className="py-5 border-b border-line">
-        <span className="text-xs text-ink-soft block mb-1">Consultation Fee</span>
+        <span className="text-xs text-ink-soft block mb-1">Consultation fee</span>
         <div className="flex items-baseline gap-1.5">
           {doctor.fee ? (
             <>
@@ -40,7 +38,7 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
                 <IndianRupee className="w-6 h-6 text-ink/70" />
                 <span>{doctor.fee}</span>
               </div>
-              <span className="text-xs text-ink-soft">per visit (approx.)</span>
+              <span className="text-xs text-ink-soft">per visit</span>
             </>
           ) : (
             <span className="font-display font-medium text-xl text-ink">
@@ -55,7 +53,7 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
         <div className="flex items-start gap-3">
           <Clock className="w-4 h-4 text-red shrink-0 mt-0.5" />
           <div>
-            <span className="text-xs text-ink-soft block font-medium">Chamber Timings</span>
+            <span className="text-xs text-ink-soft block font-medium">Chamber timing</span>
             <span className="font-semibold text-ink">{doctor.chamberTiming}</span>
           </div>
         </div>
@@ -63,13 +61,11 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
         <div className="flex items-start gap-3">
           <Calendar className="w-4 h-4 text-red shrink-0 mt-0.5" />
           <div>
-            <span className="text-xs text-ink-soft block font-medium">Available Days</span>
+            <span className="text-xs text-ink-soft block font-medium">Days</span>
             <span className="text-ink">
-              {doctor.availableDays && doctor.availableDays.length > 0
-                ? doctor.availableDays.length === 6
-                  ? "Monday to Saturday"
-                  : doctor.availableDays.join(", ")
-                : "Scheduled by appointment"}
+              {doctor.type === "daily"
+                ? "Daily chamber. Call to confirm before you visit."
+                : "Call to book a day and time."}
             </span>
           </div>
         </div>
@@ -77,11 +73,11 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
         <div className="flex items-start gap-3">
           <MapPin className="w-4 h-4 text-red shrink-0 mt-0.5" />
           <div>
-            <span className="text-xs text-ink-soft block font-medium">Chamber Location</span>
+            <span className="text-xs text-ink-soft block font-medium">Chamber location</span>
             <p className="text-xs text-ink-soft leading-relaxed">
               <strong className="text-ink font-medium">{CENTRE_INFO.name}</strong>
               <br />
-              {CENTRE_INFO.address.streetAddress}, Silchar
+              {CENTRE_INFO.formattedAddress}
             </p>
           </div>
         </div>
@@ -95,7 +91,7 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
           className="w-full flex items-center justify-center gap-2 px-5 py-3.5 rounded-full bg-red text-white hover:bg-red-deep font-medium text-sm transition-colors shadow-xs"
         >
           <Phone className="w-4 h-4" />
-          <span>Call to Book: {CENTRE_INFO.phones.displayPrimary}</span>
+          <span>Call to book: {CENTRE_INFO.phones.displayPrimary}</span>
         </a>
 
         {/* WhatsApp Deep Link */}
@@ -112,14 +108,14 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
             height={22}
             className="w-5 h-5 object-contain shrink-0"
           />
-          <span>WhatsApp Appointment Query</span>
+          <span>Ask on WhatsApp</span>
         </a>
 
         {/* Secondary Phone Option */}
         <div className="text-center pt-1">
           <a
             href={`tel:${CENTRE_INFO.phones.secondary}`}
-            className="text-xs text-ink-soft hover:text-ink transition-colors inline-flex items-center gap-1.5"
+            className="text-xs text-ink-soft hover:text-ink transition-colors inline-flex items-center gap-1.5 min-h-12"
           >
             <span>Alternate line:</span>
             <span className="font-semibold text-ink underline underline-offset-2">
@@ -143,11 +139,11 @@ export function DoctorAppointmentCard({ doctor }: DoctorAppointmentCardProps) {
       {/* Link to general enquiry form */}
       <div className="mt-4 text-center">
         <Link
-          href={`/booking?doctor=${encodeURIComponent(doctor.name)}`}
-          className="text-xs text-blue hover:underline inline-flex items-center gap-1"
+          href={`/booking?doctor=${doctor.slug}`}
+          className="text-xs text-blue hover:underline inline-flex items-center gap-1 min-h-12"
         >
           <HelpCircle className="w-3 h-3" />
-          <span>Prefer online form? Book token online</span>
+          <span>Prefer a form? Send a booking request</span>
         </Link>
       </div>
     </aside>

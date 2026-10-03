@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Phone, Stethoscope } from "lucide-react";
-import { DOCTORS, DEPARTMENTS, MedicalDepartment, Doctor } from "@/data/doctors";
+import { Phone, Stethoscope } from "lucide-react";
+import { DOCTORS, DEPARTMENTS, type MedicalDepartment, type Doctor } from "@/data/doctors";
 import { DoctorCard } from "@/components/doctor-card";
 import { CENTRE_INFO } from "@/data/centre";
 
@@ -27,7 +27,7 @@ export function DoctorPreviewSection() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface border border-line text-xs font-medium text-ink-soft mb-3">
               <Stethoscope className="w-3.5 h-3.5 text-red" />
-              <span>Chamber for 16 Specialists</span>
+              <span>{DOCTORS.length} specialists</span>
             </div>
 
             <h2 className="font-display font-medium text-3xl sm:text-4xl text-ink leading-tight tracking-tight mb-3">
@@ -35,16 +35,15 @@ export function DoctorPreviewSection() {
             </h2>
 
             <p className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed">
-              Daily OPD chambers for Silchar’s trusted medical practitioners opposite SMCH. Check chamber timings, consultation fees, or book an appointment.
+              Doctors who hold their chamber at our centre opposite SMCH. Check chamber timings and fees, or book an appointment.
             </p>
           </div>
 
           <Link
             href="/doctors"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-red hover:text-red-deep transition-colors self-start md:self-end"
+            className="inline-flex items-center min-h-12 text-sm font-semibold text-red-deep hover:underline self-start md:self-end"
           >
-            <span>View all 16 doctors</span>
-            <ArrowRight className="w-4 h-4" />
+            View all {DOCTORS.length} doctors
           </Link>
         </div>
 
@@ -56,10 +55,11 @@ export function DoctorPreviewSection() {
               <button
                 key={dept.value}
                 type="button"
+                aria-pressed={isSelected}
                 onClick={() => setSelectedDepartment(dept.value)}
-                className={`shrink-0 px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-blue cursor-pointer ${
+                className={`shrink-0 min-h-12 px-5 rounded-full text-xs sm:text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-blue cursor-pointer ${
                   isSelected
-                    ? "bg-red text-white shadow-xs"
+                    ? "bg-red text-white"
                     : "bg-surface hover:bg-paper border border-line text-ink"
                 }`}
               >
@@ -82,12 +82,12 @@ export function DoctorPreviewSection() {
               No consulting doctors found under this department.
             </p>
             <p className="text-ink-soft text-sm mb-6">
-              Try selecting &quot;All Specialists&quot; or call our front desk for doctor chamber timings.
+              Try &quot;All specialists&quot; or call our front desk for doctor chamber timings.
             </p>
             <button
               type="button"
               onClick={() => setSelectedDepartment("All")}
-              className="inline-flex items-center justify-center bg-red hover:bg-red-deep text-white text-xs font-semibold px-5 py-2.5 rounded-full transition-colors"
+              className="inline-flex items-center justify-center min-h-12 bg-red hover:bg-red-deep text-white text-sm font-semibold px-6 rounded-full transition-colors"
             >
               Show all specialists
             </button>
@@ -108,10 +108,10 @@ export function DoctorPreviewSection() {
           <div className="flex items-center gap-3">
             <a
               href={`tel:${CENTRE_INFO.phones.primary}`}
-              className="inline-flex items-center gap-2 bg-ink hover:bg-ink/90 text-paper font-medium text-xs px-5 py-2.5 rounded-full transition-colors"
+              className="inline-flex items-center gap-2 min-h-12 bg-ink hover:bg-ink/90 text-paper font-medium text-sm px-5 rounded-full transition-colors"
             >
               <Phone className="w-3.5 h-3.5 text-paper" />
-              <span>Call Reception ({CENTRE_INFO.phones.displayPrimary})</span>
+              <span>Call reception: {CENTRE_INFO.phones.displayPrimary}</span>
             </a>
           </div>
         </div>

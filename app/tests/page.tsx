@@ -9,7 +9,7 @@ import { breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
 
 const PAGE_TITLE = "Diagnostic Tests in Silchar — Blood Tests, X-ray, USG, ECG";
-const PAGE_DESCRIPTION = `Blood tests, digital X-ray, ultrasound (USG), ECG and endoscopy at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. See test rates, fasting rules and report times.`;
+const PAGE_DESCRIPTION = `Blood tests, digital X-ray, ultrasound (USG), ECG and endoscopy at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. See fasting rules and report times, and call to book.`;
 
 export const metadata: Metadata = buildMetadata({
   title: PAGE_TITLE,

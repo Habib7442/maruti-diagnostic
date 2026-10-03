@@ -28,7 +28,7 @@ export function Header() {
           <div className="relative w-11 h-11 rounded-full overflow-hidden shrink-0 shadow-xs border border-line/80">
             <Image
               src="/maruti_diagnostic_centre_logo.png"
-              alt="Maruti Diagnostic Centre Logo"
+              alt=""
               width={44}
               height={44}
               className="object-cover w-full h-full"
@@ -82,7 +82,7 @@ export function Header() {
         <div className="flex items-center gap-2 md:hidden">
           <a
             href={`tel:${CENTRE_INFO.phones.primary}`}
-            className="p-2.5 text-ink hover:text-red rounded-full bg-surface border border-line"
+            className="inline-flex items-center justify-center w-12 h-12 text-ink hover:text-red rounded-full bg-surface border border-line"
             aria-label="Call Maruti Diagnostic Centre"
           >
             <Phone className="w-4 h-4 text-red" />
@@ -90,7 +90,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2.5 text-ink hover:text-red rounded-full bg-surface border border-line focus-visible:outline-2 focus-visible:outline-blue"
+            className="inline-flex items-center justify-center w-12 h-12 text-ink hover:text-red rounded-full bg-surface border border-line focus-visible:outline-2 focus-visible:outline-blue"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation menu"
           >
@@ -102,7 +102,7 @@ export function Header() {
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-line bg-surface/98 backdrop-blur-lg px-6 py-6 animate-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col gap-3">
+          <nav className="flex flex-col gap-3" aria-label="Mobile navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -124,7 +124,7 @@ export function Header() {
               </Link>
               <a
                 href={`tel:${CENTRE_INFO.phones.primary}`}
-                className="w-full flex items-center justify-center gap-2 border-1.5 border-line text-ink font-medium h-12 rounded-full hover:bg-paper transition-colors"
+                className="w-full flex items-center justify-center gap-2 border border-line text-ink font-medium h-12 rounded-full hover:bg-paper transition-colors"
               >
                 <Phone className="w-4 h-4 text-red stroke-[2]" />
                 <span>Call {CENTRE_INFO.phones.displayPrimary}</span>

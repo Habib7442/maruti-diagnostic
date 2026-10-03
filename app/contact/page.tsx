@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { CENTRE_INFO } from "@/data/centre";
 import { BookingForm } from "@/components/booking-form";
+import { CentreHours } from "@/components/centre-hours";
 import { FaqSection } from "@/components/faq-section";
 import { JsonLd } from "@/components/json-ld";
 import { getContactFaqs } from "@/data/faqs";
@@ -92,23 +93,21 @@ export default function ContactPage() {
                 <div className="flex items-center gap-2.5 pb-4 border-b border-line">
                   <MapPin className="w-5 h-5 text-red shrink-0" />
                   <h2 className="font-display font-medium text-xl text-ink">
-                    Exact Location & NAP
+                    Address and phone
                   </h2>
                 </div>
 
                 {/* Byte-for-byte exact address matching GBP */}
                 <div>
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft block mb-1">
-                    Facility Name & Address
-                  </span>
+
                   <p className="text-base font-medium text-ink leading-snug">
                     {CENTRE_INFO.name}
                   </p>
                   <p className="text-sm text-ink-soft mt-1 leading-relaxed">
-                    {CENTRE_INFO.address.streetAddress}, {CENTRE_INFO.address.addressLocality}, {CENTRE_INFO.address.addressRegion} - {CENTRE_INFO.address.postalCode}
+                    {CENTRE_INFO.formattedAddress}
                   </p>
                   <p className="text-xs text-ink-soft/80 mt-1">
-                    Landmark: Directly opposite SMCH main gate, behind Maruti Medical store.
+                    Landmark: opposite SMCH main gate, behind Maruti Medical.
                   </p>
                 </div>
 
@@ -118,23 +117,21 @@ export default function ContactPage() {
                     href="https://www.google.com/maps/dir/?api=1&destination=Maruti+Diagnostic+Centre+Silchar"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue hover:underline"
+                    className="inline-flex items-center gap-2 min-h-12 text-sm font-semibold text-blue hover:underline"
                   >
                     <Navigation className="w-4 h-4" />
-                    <span>Get Google Maps Driving Directions</span>
+                    <span>Get directions on Google Maps</span>
                   </a>
                 </div>
 
                 {/* Phone Numbers */}
                 <div className="pt-4 border-t border-line space-y-3">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft block">
-                    Telephone Assistance
-                  </span>
+                  <h3 className="text-sm font-semibold text-ink">Phone</h3>
 
                   <div className="space-y-2">
                     <a
                       href={`tel:${CENTRE_INFO.phones.primary}`}
-                      className="flex items-center justify-between p-3 rounded-xl bg-paper hover:bg-clay/30 border border-line transition-colors text-sm"
+                      className="flex items-center justify-between min-h-12 px-3 rounded-xl bg-paper hover:bg-clay/30 border border-line transition-colors text-sm"
                     >
                       <div className="flex items-center gap-2.5">
                         <Phone className="w-4 h-4 text-red" />
@@ -147,7 +144,7 @@ export default function ContactPage() {
 
                     <a
                       href={`tel:${CENTRE_INFO.phones.secondary}`}
-                      className="flex items-center justify-between p-3 rounded-xl bg-paper hover:bg-clay/30 border border-line transition-colors text-sm"
+                      className="flex items-center justify-between min-h-12 px-3 rounded-xl bg-paper hover:bg-clay/30 border border-line transition-colors text-sm"
                     >
                       <div className="flex items-center gap-2.5">
                         <Phone className="w-4 h-4 text-ink-soft" />
@@ -168,7 +165,7 @@ export default function ContactPage() {
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex items-center justify-center gap-2.5 px-5 py-3 rounded-full bg-[#25D366]/10 text-[#128C7E] hover:bg-[#25D366]/20 border border-[#25D366]/30 font-semibold text-sm transition-colors"
+                    className="w-full flex items-center justify-center gap-2.5 px-5 min-h-12 rounded-full bg-[#25D366]/10 text-[#0E6F63] hover:bg-[#25D366]/20 border border-[#25D366]/30 font-semibold text-sm transition-colors"
                   >
                     <Image
                       src="/social-icons/whatsapp.png"
@@ -183,22 +180,13 @@ export default function ContactPage() {
 
                 {/* Operating Hours */}
                 <div className="pt-4 border-t border-line space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink-soft block">
-                    Operating & Lab Hours
-                  </span>
+                  <h3 className="text-sm font-semibold text-ink">Opening hours</h3>
                   <div className="flex items-start gap-2.5 text-xs text-ink-soft">
                     <Clock className="w-4 h-4 text-red shrink-0 mt-0.5" />
                     <div className="space-y-1">
-                      <p>
-                        <strong className="text-ink font-medium">Monday – Saturday:</strong>{" "}
-                        7:30 AM – 8:30 PM
-                      </p>
-                      <p>
-                        <strong className="text-ink font-medium">Sunday:</strong> 8:00 AM –
-                        2:00 PM
-                      </p>
-                      <p className="text-[11px] text-ink-soft/70 pt-0.5">
-                        * Doctor chamber timings vary by specialist. Check doctor profile for daily OPD schedule.
+                      <CentreHours className="space-y-1" />
+                      <p className="text-ink-soft pt-0.5">
+                        Doctor chamber timings vary by specialist. See each doctor&apos;s profile.
                       </p>
                     </div>
                   </div>
@@ -234,7 +222,7 @@ export default function ContactPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
                 <h2 className="font-display font-medium text-xl sm:text-2xl text-ink">
-                  Interactive Centre Map
+                  Find us on the map
                 </h2>
                 <p className="text-xs sm:text-sm text-ink-soft mt-1">
                   Located directly opposite Silchar Medical College & Hospital (SMCH), Ghungoor
@@ -245,10 +233,10 @@ export default function ContactPage() {
                 href={CENTRE_INFO.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-paper hover:bg-clay/40 border border-line text-xs font-semibold text-ink transition-colors self-start sm:self-auto"
+                className="inline-flex items-center gap-1.5 min-h-12 px-5 rounded-full bg-paper hover:bg-clay/40 border border-line text-xs font-semibold text-ink transition-colors self-start sm:self-auto"
               >
                 <Navigation className="w-3.5 h-3.5 text-red" />
-                <span>Open in Google Maps App</span>
+                <span>Open in Google Maps</span>
               </a>
             </div>
 

@@ -15,7 +15,7 @@ export function absoluteUrl(path = "/"): string {
 }
 
 /** Bump when content in data/*.ts changes; drives sitemap lastModified (must not be "now" on every build). */
-export const CONTENT_UPDATED = "2026-09-19";
+export const CONTENT_UPDATED = "2026-10-03";
 
 export const SEO = {
   siteName: CENTRE_INFO.name,
@@ -117,7 +117,7 @@ export function doctorMetadata(doctor: Doctor): Metadata {
   const timing =
     doctor.type === "daily"
       ? `Chamber ${doctor.chamberTiming}`
-      : "Visiting consultant, by appointment";
+      : "Associated doctor, by appointment";
   const fee = doctor.fee ? `, fee ₹${doctor.fee}` : "";
   const description = truncate(
     `${doctor.name}, ${doctor.specialty}, consults at ${CENTRE_INFO.name}, Ghungoor, opposite SMCH, Silchar. ${timing}${fee}. Call ${CENTRE_INFO.phones.primary}.`,
@@ -133,14 +133,13 @@ export function doctorMetadata(doctor: Doctor): Metadata {
 }
 
 export function testMetadata(test: MedicalTest): Metadata {
-  const price = test.price ? `Rate ₹${test.price}.` : "Call for rates.";
   const description = truncate(
-    `${test.name} at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. ${test.shortDescription} ${price} Report: ${test.reportTurnaround}.`,
+    `${test.name} at ${CENTRE_INFO.name}, Ghungoor (opp. SMCH), Silchar. ${test.shortDescription} Report: ${test.reportTurnaround}. Call ${CENTRE_INFO.phones.primary} to book.`,
     158
   );
 
   return buildMetadata({
-    title: `${test.name} in Silchar — Price, Preparation, Report Time`,
+    title: `${test.name} in Silchar — Preparation & Report Time`,
     description,
     path: `/tests/${test.slug}`,
     type: "article",
