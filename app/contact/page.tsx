@@ -72,7 +72,7 @@ export default function ContactPage() {
           <header className="mb-8 sm:mb-12 max-w-3xl">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-surface border border-line text-xs font-medium text-ink-soft mb-3">
               <Building2 className="w-3.5 h-3.5 text-red" />
-              <span>SMC Point, Ghungoor, Silchar</span>
+              <span>SMCH Point, Ghungoor, Silchar</span>
             </div>
 
             <h1 className="font-display font-medium text-3xl sm:text-4xl lg:text-5xl text-ink leading-tight tracking-tight mb-4">

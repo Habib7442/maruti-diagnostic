@@ -19,7 +19,7 @@ export function LocationMapSection() {
           </h2>
 
           <p className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed">
-            Conveniently situated at SMC Point, Ghungoor, directly opposite Silchar Medical College & Hospital (behind Maruti Medical). Accessible from Hailakandi, Karimganj, and throughout Silchar.
+            Conveniently situated at SMCH Point, Ghungoor, directly opposite Silchar Medical College & Hospital (behind Maruti Medical). Accessible from Hailakandi, Karimganj, and throughout Silchar.
           </p>
         </div>
 

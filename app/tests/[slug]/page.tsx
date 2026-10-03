@@ -133,7 +133,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
               </h1>
 
               <p className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed mb-6">
-                {test.shortDescription} Available at Maruti Diagnostic Centre, SMC Point, Ghungoor, opposite SMCH, Silchar.
+                {test.shortDescription} Available at Maruti Diagnostic Centre, SMCH Point, Ghungoor, opposite SMCH, Silchar.
               </p>
 
               {/* Fast Reassurance Bar */}
@@ -147,7 +147,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
 
                 <div className="flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-ink-soft shrink-0" />
-                  <span>Maruti Diagnostic, SMC Point, Ghungoor (Opp. SMCH)</span>
+                  <span>Maruti Diagnostic, SMCH Point, Ghungoor (Opp. SMCH)</span>
                 </div>
               </div>
             </div>
@@ -219,7 +219,7 @@ export default async function TestDetailPage({ params }: TestPageProps) {
                         Walk in or book on WhatsApp
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
-                        Walk in directly to our counter at SMC Point, Ghungoor (opp. SMCH), or message us on WhatsApp in advance to check preparation requirements and avoid counter wait times.
+                        Walk in directly to our counter at SMCH Point, Ghungoor (opp. SMCH), or message us on WhatsApp in advance to check preparation requirements and avoid counter wait times.
                       </p>
                     </div>
                   </div>

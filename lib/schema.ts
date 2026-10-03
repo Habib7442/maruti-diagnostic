@@ -81,6 +81,7 @@ const CATEGORY_SPECIALTY: Record<TestCategory, string> = {
   Imaging: "Radiography",
   Cardiac: "Cardiovascular",
   Endoscopy: "Gastroenterologic",
+  Neurology: "Neurologic",
 };
 
 // --- Entity graph (site-wide) ---

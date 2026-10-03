@@ -141,7 +141,7 @@ export default function BookingPage() {
               Opposite SMCH
             </h3>
             <p className="text-xs text-ink-soft leading-relaxed">
-              Conveniently located at SMC Point, Ghungoor, directly opposite Silchar Medical College & Hospital, behind Maruti Medical.
+              Conveniently located at SMCH Point, Ghungoor, directly opposite Silchar Medical College & Hospital, behind Maruti Medical.
             </p>
           </div>
         </div>

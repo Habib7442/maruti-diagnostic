@@ -1,4 +1,4 @@
-export type TestCategory = "Pathology" | "Imaging" | "Cardiac" | "Endoscopy";
+export type TestCategory = "Pathology" | "Imaging" | "Cardiac" | "Endoscopy" | "Neurology";
 
 export interface MedicalTest {
   id: string;
@@ -158,6 +158,28 @@ export const TESTS: MedicalTest[] = [
     isPopular: true,
     sampleType: "Digital Radiography",
   },
+  {
+    id: "color-doppler",
+    name: "Color Doppler Ultrasound",
+    slug: "color-doppler-test-silchar",
+    category: "Imaging",
+    shortDescription: "An ultrasound scan that shows blood flow through arteries and veins in the neck, arms, legs, abdomen or a pregnancy.",
+    clinicalImportance: "Doctors advise a Doppler scan to look for blocked or narrowed blood vessels, clots in leg veins (DVT), varicose veins, poor circulation, and to check blood flow to the baby in pregnancy.",
+    preparation: "Depends on the area being scanned. For an abdominal Doppler, do not eat for 6 hours before the scan. For neck, arm, leg or pregnancy Doppler, no fasting is needed. Wear loose clothing and bring your doctor's prescription.",
+    reportTurnaround: "Call to confirm report time",
+    sampleType: "Non-invasive Scan",
+  },
+  {
+    id: "anomaly-scan",
+    name: "Anomaly Scan (Pregnancy Ultrasound)",
+    slug: "anomaly-scan-silchar",
+    category: "Imaging",
+    shortDescription: "A detailed pregnancy ultrasound, usually done between 18 and 22 weeks, to check how the baby is developing.",
+    clinicalImportance: "The anomaly scan checks the baby's head, brain, spine, heart, face, kidneys and limbs, the position of the placenta and the amount of fluid. It helps your gynaecologist pick up problems early and plan care. As required by the PCPNDT Act, the sex of the baby is not disclosed.",
+    preparation: "No fasting is needed. Book the scan in the week your gynaecologist advises, usually between 18 and 22 weeks. Bring your doctor's prescription, earlier scan reports and a photo ID.",
+    reportTurnaround: "Call to confirm report time",
+    sampleType: "Non-invasive Scan",
+  },
 
   // --- Cardiac ---
   {
@@ -185,13 +207,38 @@ export const TESTS: MedicalTest[] = [
     reportTurnaround: "Same day (detailed photographic report post-procedure)",
     sampleType: "Endoscopic Visualisation",
   },
+
+  // --- Neurology ---
+  {
+    id: "eeg",
+    name: "EEG (Electroencephalogram)",
+    slug: "eeg-test-silchar",
+    category: "Neurology",
+    shortDescription: "A painless test that records the brain's electrical activity using small sensors placed on the scalp.",
+    clinicalImportance: "Doctors advise an EEG to look for seizures (fits) and epilepsy, unexplained fainting or blackouts, and some sleep, memory and behaviour problems.",
+    preparation: "Wash your hair the night before or on the morning of the test, and do not use oil, gel or spray. Eat normally and keep taking your medicines unless your doctor says otherwise. Your doctor may ask you to sleep less the night before.",
+    reportTurnaround: "Call to confirm report time",
+    sampleType: "Non-invasive Recording",
+  },
+  {
+    id: "ncv",
+    name: "NCV (Nerve Conduction Study)",
+    slug: "ncv-test-silchar",
+    category: "Neurology",
+    shortDescription: "Measures how fast and how strongly signals travel along the nerves of the arms and legs.",
+    clinicalImportance: "Doctors advise an NCV test for numbness, tingling, burning or weakness in the hands or feet, carpal tunnel syndrome, diabetic nerve damage (neuropathy) and nerve injuries.",
+    preparation: "Bathe before the test and do not apply oil, cream or lotion on your arms and legs. Wear loose clothing. Tell the staff if you have a pacemaker. Keep taking your usual medicines.",
+    reportTurnaround: "Call to confirm report time",
+    sampleType: "Non-invasive Recording",
+  },
 ];
 
 export const TEST_CATEGORIES: { label: string; value: TestCategory | "All" }[] = [
-  { label: "All Diagnostic Tests", value: "All" },
-  { label: "Pathology & Blood", value: "Pathology" },
-  { label: "Ultrasound & X-Ray", value: "Imaging" },
-  { label: "Cardiac / ECG", value: "Cardiac" },
+  { label: "All tests", value: "All" },
+  { label: "Blood and urine", value: "Pathology" },
+  { label: "Ultrasound, Doppler and X-ray", value: "Imaging" },
+  { label: "ECG", value: "Cardiac" },
+  { label: "EEG and NCV", value: "Neurology" },
   { label: "Endoscopy", value: "Endoscopy" },
 ];
 

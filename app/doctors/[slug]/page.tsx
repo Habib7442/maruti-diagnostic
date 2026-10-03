@@ -264,7 +264,7 @@ export default async function DoctorPage({ params }: DoctorPageProps) {
                       </strong>
                       <p className="text-xs leading-relaxed text-ink-soft mt-0.5">
                         Consultation tokens are allocated on a daily basis at
-                        the front desk of Maruti Diagnostic Centre (SMC Point,
+                        the front desk of Maruti Diagnostic Centre (SMCH Point,
                         Ghungoor, directly opposite SMCH, behind Maruti
                         Medical). Patients can call ahead to confirm daily OPD
                         timings.

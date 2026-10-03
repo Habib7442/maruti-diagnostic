@@ -22,7 +22,7 @@ import { breadcrumbSchema, webPageSchema } from "@/lib/schema";
 import { buildMetadata } from "@/lib/seo";
 
 const PAGE_TITLE = "About Us — Diagnostics & Doctor Chamber in Ghungoor, Silchar";
-const PAGE_DESCRIPTION = `About ${CENTRE_INFO.name} at SMC Point, Ghungoor, Silchar (opposite SMCH). Daily chamber for ${CENTRE_INFO.stats.specialistsCount} medical specialists with pathology, X-ray, ultrasound, ECG and endoscopy.`;
+const PAGE_DESCRIPTION = `About ${CENTRE_INFO.name} at SMCH Point, Ghungoor, Silchar (opposite SMCH). Daily chamber for ${CENTRE_INFO.stats.specialistsCount} medical specialists with pathology, X-ray, ultrasound, ECG and endoscopy.`;
 
 export const metadata: Metadata = buildMetadata({
   title: PAGE_TITLE,
@@ -50,7 +50,7 @@ export default function AboutPage() {
     {
       value: "Opp. SMCH",
       label: "Easy to reach",
-      detail: "SMC Point, Ghungoor",
+      detail: "SMCH Point, Ghungoor",
     },
   ];
 
@@ -160,7 +160,7 @@ export default function AboutPage() {
             </h1>
 
             <p className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed">
-              Situated at SMC Point, Ghungoor, directly opposite Silchar Medical College & Hospital (behind Maruti Medical), we bring expert clinical consultations and automated laboratory testing together in one dedicated facility.
+              Situated at SMCH Point, Ghungoor, directly opposite Silchar Medical College & Hospital (behind Maruti Medical), we bring expert clinical consultations and automated laboratory testing together in one dedicated facility.
             </p>
           </header>
 
@@ -219,7 +219,7 @@ export default function AboutPage() {
 
                 <div className="space-y-3 text-xs sm:text-sm text-ink-soft">
                   <p className="leading-relaxed">
-                    <strong className="text-ink font-medium">SMC Point, Ghungoor:</strong> Located directly across the main entrance of Silchar Medical College & Hospital (SMCH), behind Maruti Medical store.
+                    <strong className="text-ink font-medium">SMCH Point, Ghungoor:</strong> Located directly across the main entrance of Silchar Medical College & Hospital (SMCH), behind Maruti Medical store.
                   </p>
                   <p className="leading-relaxed">
                     <strong className="text-ink font-medium">Regional Access:</strong> Conveniently accessible for patients and families travelling from Hailakandi, Karimganj, Udharbond, and the tea garden communities of southern Assam.

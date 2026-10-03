@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Phone, FlaskConical, Scan, Activity, FileCheck2 } from "lucide-react";
+import { Clock, Phone, FlaskConical, Scan, Activity, FileCheck2, Brain } from "lucide-react";
 import type { MedicalTest, TestCategory } from "@/data/tests";
 import { CENTRE_INFO } from "@/data/centre";
 
@@ -9,6 +9,7 @@ const CATEGORY_ICONS: Record<TestCategory, typeof FlaskConical> = {
   Imaging: Scan,
   Cardiac: Activity,
   Endoscopy: FileCheck2,
+  Neurology: Brain,
 };
 
 interface TestCardProps {

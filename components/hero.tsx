@@ -9,7 +9,9 @@ export function Hero() {
     { name: "Pathology Tests", href: "/tests" },
     { name: "Digital X-Ray", href: "/tests" },
     { name: "USG (Ultrasound)", href: "/tests" },
-    { name: "ECG & Cardiac", href: "/tests" },
+    { name: "Color Doppler", href: "/tests/color-doppler-test-silchar" },
+    { name: "ECG", href: "/tests/ecg-test-silchar" },
+    { name: "EEG & NCV", href: "/tests/eeg-test-silchar" },
     { name: "Endoscopy", href: "/tests" },
     { name: `${DOCTORS.length} doctors`, href: "/doctors" },
   ];
@@ -131,7 +133,7 @@ export function Hero() {
                 </div>
                 <div className="flex-1 text-xs">
                   <div className="font-semibold text-ink text-sm">
-                    SMC Point, Ghungoor, Silchar
+                    SMCH Point, Ghungoor, Silchar
                   </div>
                   <div className="text-ink-soft leading-relaxed">
                     Opposite SMCH main gate, behind Maruti Medical

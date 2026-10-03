@@ -43,7 +43,7 @@ const DOCTOR_RECORDS: Doctor[] = [
     chamberTiming: "3:00 PM - 4:00 PM",
     fee: 600,
     type: "daily",
-    bio: "Dr. Surajit Kr. Sen (MBBS, MD) is a Consultant Neuro-Psychiatrist with a daily chamber from 3:00 PM to 4:00 PM at Maruti Diagnostic Centre, SMC Point, Ghungoor, opposite SMCH, Silchar. He sees adults with mental health and neuropsychiatric concerns such as depression, anxiety, sleep problems and memory complaints.",
+    bio: "Dr. Surajit Kr. Sen (MBBS, MD) is a Consultant Neuro-Psychiatrist with a daily chamber from 3:00 PM to 4:00 PM at Maruti Diagnostic Centre, SMCH Point, Ghungoor, opposite SMCH, Silchar. He sees adults with mental health and neuropsychiatric concerns such as depression, anxiety, sleep problems and memory complaints.",
     conditionsTreated: [
       "Depression and mood disorders",
       "Anxiety and panic attacks",
@@ -230,7 +230,7 @@ const DOCTOR_RECORDS: Doctor[] = [
     chamberTiming: "By appointment",
     fee: null,
     type: "visiting",
-    bio: "Dr. Sridham Sutradhar (MBBS, MS, MCh Neurosurgery) is a Consultant Neurosurgeon who holds his chamber at Maruti Diagnostic Centre, SMC Point, Ghungoor, Silchar. He has a fellowship in endoscopic brain and spine surgery and sees patients for spine, brain and nerve problems.",
+    bio: "Dr. Sridham Sutradhar (MBBS, MS, MCh Neurosurgery) is a Consultant Neurosurgeon who holds his chamber at Maruti Diagnostic Centre, SMCH Point, Ghungoor, Silchar. He has a fellowship in endoscopic brain and spine surgery and sees patients for spine, brain and nerve problems.",
     conditionsTreated: [
       "Slip disc and spine problems",
       "Sciatica and nerve compression",
@@ -254,7 +254,7 @@ const DOCTOR_RECORDS: Doctor[] = [
     chamberTiming: "By appointment",
     fee: null,
     type: "visiting",
-    bio: "Dr. Shromona Kar (MBBS, MD Dermatology, Venereology & Leprosy) is a dermatologist who holds her chamber at Maruti Diagnostic Centre, SMC Point, Ghungoor, Silchar. She is faculty at Silchar Medical College, has a fellowship in cosmetology and facial aesthetics, and sees patients for skin, hair and nail problems.",
+    bio: "Dr. Shromona Kar (MBBS, MD Dermatology, Venereology & Leprosy) is a dermatologist who holds her chamber at Maruti Diagnostic Centre, SMCH Point, Ghungoor, Silchar. She is faculty at Silchar Medical College, has a fellowship in cosmetology and facial aesthetics, and sees patients for skin, hair and nail problems.",
     conditionsTreated: [
       "Acne and acne scars",
       "Psoriasis and eczema",

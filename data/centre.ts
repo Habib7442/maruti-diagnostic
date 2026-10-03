@@ -56,16 +56,16 @@ export const CENTRE_INFO: CentreInfo = {
   legalName: "Maruti Diagnostic Centre",
   logoUrl: "/maruti_diagnostic_centre_logo.png",
   tagline: "Trusted diagnostics in Ghungoor, opposite SMCH",
-  landmark: "SMC Point, Ghungoor, Opp. SMCH, Behind Maruti Medical",
+  landmark: "SMCH Point, opp. SMCH, behind Maruti Medical, Ghungoor",
   address: {
-    streetAddress: "SMC Point, Ghungoor, Opp. SMCH, Behind Maruti Medical",
+    streetAddress: "SMCH Point, opp. SMCH, behind Maruti Medical, Ghungoor, Masimpur, Silcoorie Grant",
     addressLocality: "Silchar",
     addressRegion: "Assam",
     postalCode: "788014",
     addressCountry: "IN",
   },
-  /** The one display address. Use it everywhere so NAP stays byte-for-byte identical. */
-  formattedAddress: "SMC Point, Ghungoor, Opp. SMCH, Behind Maruti Medical, Silchar, Assam 788014",
+  /** Copied byte-for-byte from the Google Business Profile. Use it everywhere so NAP stays identical. */
+  formattedAddress: "SMCH Point, opp. SMCH, behind Maruti Medical, Ghungoor, Masimpur, Silchar, Silcoorie Grant, Assam 788014",
   geo: {
     latitude: 24.7892,
     longitude: 92.7938,

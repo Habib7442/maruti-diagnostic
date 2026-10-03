@@ -18,8 +18,13 @@ const TEST_LINKS: Record<string, string> = {
   "HbA1c Glycated Haemoglobin": "hba1c-test-silchar",
   "Lipid & Cholesterol Profile": "lipid-profile-test-silchar",
   "Whole Abdomen & Pelvis USG": "ultrasound-whole-abdomen-silchar",
+  "Color Doppler Ultrasound": "color-doppler-test-silchar",
+  "Anomaly Scan (Pregnancy)": "anomaly-scan-silchar",
+  "EEG (Brain Wave Test)": "eeg-test-silchar",
+  "NCV (Nerve Conduction Study)": "ncv-test-silchar",
   "Digital Chest X-Ray (PA View)": "digital-x-ray-chest-silchar",
   "12-Lead Electrocardiogram (ECG)": "ecg-test-silchar",
+  "Upper GI Diagnostic Endoscopy": "upper-gi-endoscopy-silchar",
 };
 
 export function ServicesPreviewSection() {
@@ -50,8 +55,8 @@ export function ServicesPreviewSection() {
         "Detailed sonographic imaging of abdominal and pelvic anatomy, aiding early detection of stones, fatty liver, and soft tissue pathologies.",
       popularTests: [
         "Whole Abdomen & Pelvis USG",
-        "KUB & Urinary Bladder",
-        "Obstetric & Antenatal Scans",
+        "Color Doppler Ultrasound",
+        "Anomaly Scan (Pregnancy)",
         "Upper Abdominal Sonography",
       ],
       turnaround: "Report ready within 1 to 2 hours of scan",
@@ -75,19 +80,19 @@ export function ServicesPreviewSection() {
       actionHref: "/booking?type=test",
     },
     {
-      title: "Cardiac ECG & Video Endoscopy",
+      title: "ECG, EEG, NCV & Endoscopy",
       icon: FileCheck2,
-      badge: "ECG and endoscopy",
+      badge: "Heart, brain and nerves",
       description:
-        "Critical non-invasive cardiac evaluation alongside specialized upper gastrointestinal video endoscopy for diagnostic clarity.",
+        "ECG for the heart, EEG for the brain, NCV for the nerves, and upper GI endoscopy for the stomach, all in the same building as the doctors.",
       popularTests: [
         "12-Lead Electrocardiogram (ECG)",
         "Upper GI Diagnostic Endoscopy",
-        "Cardiac Rhythm Screening",
-        "GERD & Peptic Ulcer Evaluation",
+        "EEG (Brain Wave Test)",
+        "NCV (Nerve Conduction Study)",
       ],
-      turnaround: "Immediate ECG readouts; same-day endoscopy",
-      actionText: "Book ECG or endoscopy",
+      turnaround: "Call to confirm report time for EEG and NCV",
+      actionText: "Book ECG, EEG or NCV",
       actionHref: "/booking?type=test",
     },
   ];
@@ -108,7 +113,7 @@ export function ServicesPreviewSection() {
             </h2>
 
             <p className="font-sans text-base sm:text-lg text-ink-soft leading-relaxed">
-              Equipped with automated clinical analyzers, digital X-ray, high-resolution ultrasound, and cardiac monitoring at SMC Point, Ghungoor (directly opposite SMCH).
+              Equipped with automated clinical analyzers, digital X-ray, high-resolution ultrasound, and cardiac monitoring at SMCH Point, Ghungoor (directly opposite SMCH).
             </p>
           </div>
 

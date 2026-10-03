@@ -31,7 +31,7 @@ export function FacilityHighlightsSection() {
       icon: MapPin,
       title: "Opposite SMCH main gate",
       description:
-        "Conveniently positioned at SMC Point, Ghungoor, Silchar, with easy accessibility for patients travelling from Hailakandi, Karimganj, and Cachar.",
+        "Conveniently positioned at SMCH Point, Ghungoor, Silchar, with easy accessibility for patients travelling from Hailakandi, Karimganj, and Cachar.",
     },
     {
       icon: Clock,

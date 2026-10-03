@@ -120,7 +120,9 @@ export function getTestFaqs(test: MedicalTest): Faq[] {
     },
     {
       question: `How soon will I get my ${test.name} report?`,
-      answer: `${test.reportTurnaround}.`,
+      answer: /call to confirm/i.test(test.reportTurnaround)
+        ? `Report time depends on the test. Call ${phones.displayPrimary} to confirm when your ${test.name} report will be ready.`
+        : `${test.reportTurnaround}.`,
     },
     {
       question: `How do I book ${test.name} in Silchar?`,
